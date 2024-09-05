@@ -6,14 +6,26 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        background: "#e1e0de",
+        primary: "#161616",
+        darkPrimary: "#D4D4D4",
+        darkBg: "#171717",
+        darkSecondary: "#A3A3A3",
+      },
+      fontFamily: {
+        overpass: ["Overpass", "system-ui", "Arial"],
+        spectral: ["Spectral", "sans-serif"],
+        inter: ["Inter", "system-ui", "Arial"],
+        inter_tight: ["Inter Tight", "system-ui", "Arial"],
+        kurale: ["Kurale", "serif"],
+        kreon: ["Kreon", "serif"],
       },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography")],
 };
 export default config;
