@@ -16,18 +16,17 @@ import { BiLogoGmail } from "react-icons/bi";
 import { IoIosSunny } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
 import { TbLogout2 } from "react-icons/tb";
-import { useGlobalContext } from "../AppContext";
+import { useGlobalContext } from "../contexts/AppContext";
 import useMenu from "../hooks/useMenu";
 import { genConfig } from "react-nice-avatar";
 import ReactNiceAvatar from "react-nice-avatar";
 import { toast } from "sonner";
 import { signUserOut } from "../_firebase/auth";
+import { useWarningContext } from "../contexts/WarningModalContext";
 
 const Navbar = ({ bg }: { bg: string }) => {
   const router = useRouter();
   const { admin, isAdmin, user, theme, setTheme } = useGlobalContext();
-  // let value = useGlobalContext();
-  // console.log(value);
   const [imageError, setImageError] = useState(false);
 
   const sidebarRef = useRef(null);
@@ -98,7 +97,7 @@ const Navbar = ({ bg }: { bg: string }) => {
                   !imageError ? (
                     <img
                       src={user.photoURL}
-                      alt={user.dispalyName + " display photo"}
+                      alt={user.displayName + " display photo"}
                       className='size-6 rounded-full lg:size-8'
                       onError={() => setImageError(true)}
                     />

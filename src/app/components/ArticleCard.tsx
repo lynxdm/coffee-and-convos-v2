@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Timestamp } from "firebase/firestore";
 import { fetchArticleContent } from "../_firebase/storage";
-import { timeAgo, formatLink } from "../accessoryFunctions";
+import { timeAgo, formatLink } from "../_lib/accessoryFunctions";
 
 const ArticleCard = ({
   title,

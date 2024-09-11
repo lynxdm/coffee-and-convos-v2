@@ -4,9 +4,9 @@ import { auth } from "@/app/_firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 
 interface AppContextType {
-  admin: {};
+  admin: { displayName: string; email: string };
   isAdmin: boolean;
-  user: {};
+  user: { email: string; photoURL: string; displayName: string };
   theme: string;
   setTheme: (theme: string) => void;
 }
@@ -80,7 +80,13 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const useGlobalContext = () => {
-  return useContext(AppContext);
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error(
+      "useGlobalContext must be used within a WarningModalProvider"
+    );
+  }
+  return context;
 };
 
 export default AppProvider;

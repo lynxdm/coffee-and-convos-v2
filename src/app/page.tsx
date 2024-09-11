@@ -40,7 +40,8 @@ export default async function Home() {
               <Image
                 src={authorHero}
                 className='aspect-square'
-                fill
+                width={1829}
+                height={1814}
                 placeholder='blur'
                 priority
                 alt='A photo of the author, Adefunke'
