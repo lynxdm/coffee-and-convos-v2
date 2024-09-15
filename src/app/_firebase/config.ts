@@ -22,5 +22,10 @@ export const db = getFirestore(firebase_app);
 export const auth = getAuth(firebase_app);
 export const storage = getStorage(firebase_app);
 export const provider = new GoogleAuthProvider();
+export const admin = {
+  displayName: "Ajayi Ayobami",
+  email: "lynxdm32@gmail.com",
+  userId: "RpnOnCzRMZb790xizN1yl4U2JCK2",
+};
 
 export default firebase_app;

@@ -53,7 +53,10 @@ const WarningModalProvider = ({ children }: { children: React.ReactNode }) => {
               <div className='mt-3 flex gap-4 *:rounded-md *:px-3 lg:*:px-4 *:py-2 *:font-semibold text-sm lg:text-base'>
                 <button
                   className='bg-red-700 dark:text-black text-white'
-                  onClick={warningContent.proceed}
+                  onClick={() => {
+                    warningContent.proceed();
+                    setIsModalWarningOpen(false);
+                  }}
                 >
                   {warningContent.proceedText}
                 </button>

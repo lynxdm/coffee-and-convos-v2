@@ -2,13 +2,21 @@
 import React, { useContext, useState, useEffect } from "react";
 import { auth } from "@/app/_firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
+import { admin } from "@/app/_firebase/config";
+import { updateNotifications } from "../_firebase/notifications";
 
 interface AppContextType {
   admin: { displayName: string; email: string };
   isAdmin: boolean;
-  user: { email: string; photoURL: string; displayName: string };
+  user: {
+    email: string;
+    photoURL: string;
+    displayName: string;
+    userId: string;
+  };
   theme: string;
   setTheme: (theme: string) => void;
+  userNotifications: [];
 }
 
 const AppContext = React.createContext<AppContextType | undefined>(undefined);
@@ -22,15 +30,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [theme, setTheme] = useState(localStorage?.getItem("theme") || "light");
 
-  const admin = { displayName: "Ajayi Ayobami", email: "lynxdm32@gmail.com" };
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  const checkUser = () => {
-    if (user.email === admin.email) {
-      setIsAdmin(true);
-    }
-  };
-
   useEffect(() => {
     localStorage.setItem("theme", theme);
     const root = window.document.documentElement;
@@ -41,10 +40,29 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [theme]);
 
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const checkUser = () => {
+    if (user.email === admin.email) {
+      setIsAdmin(true);
+    }
+  };
+
+  const [userNotifications, setUserNotifications] = useState(
+    JSON.parse(sessionStorage.getItem("userNotifications") || "[]")
+  );
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      "userNotifications",
+      JSON.stringify(userNotifications)
+    );
+  }, [userNotifications]);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log("user logged in", user);
+        console.log("user logged in");
         const { displayName, email, photoURL, uid } = user;
         setUser({
           displayName: displayName ?? "Guest User",
@@ -66,14 +84,22 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     return unsubscribe;
   }, []);
 
-  useEffect(() => {
-    if (user.email !== "") {
+  const updateUIForUser = async () => {
+    if (user.email) {
       checkUser();
+      const newNotifications = await updateNotifications(user);
+      setUserNotifications(newNotifications);
     }
+  };
+
+  useEffect(() => {
+    updateUIForUser();
   }, [user]);
 
   return (
-    <AppContext.Provider value={{ admin, isAdmin, user, theme, setTheme }}>
+    <AppContext.Provider
+      value={{ admin, isAdmin, user, theme, setTheme, userNotifications }}
+    >
       {children}
     </AppContext.Provider>
   );

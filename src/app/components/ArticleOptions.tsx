@@ -6,7 +6,7 @@ import { useGlobalContext } from "../contexts/AppContext";
 import { Doc, unpinArticles, pinArticle } from "../_firebase/firestore";
 import { useRouter } from "next/navigation";
 import { deleteDoc, doc, collection, query, where } from "firebase/firestore";
-import { deleteObject, ref } from "firebase/storage";
+import { deleteObject, ref, listAll } from "firebase/storage";
 import { db, storage } from "../_firebase/config";
 
 const ArticleOptions = ({
@@ -44,10 +44,23 @@ const ArticleOptions = ({
     router.push("/new");
   };
 
-  const deleteArticle = () => {
-    deleteDoc(doc(db, "articles", article.id));
-    deleteObject(ref(storage, `articles/${article.id}`));
-    router.push("/blog");
+  const deleteArticle = async () => {
+    try {
+      // Delete the Firestore document
+      await deleteDoc(doc(db, "articles", article.id));
+
+      const folderRef = ref(storage, `articles/${article.id}`);
+      const { items } = await listAll(folderRef);
+
+      const deletePromises = items.map((fileRef) => deleteObject(fileRef));
+      await Promise.all(deletePromises);
+
+      // Navigate to the blog page
+      router.push("/blog");
+    } catch (error) {
+      console.log("Error deleting article:", error);
+      throw new Error("Error deleting article");
+    }
   };
 
   return (
@@ -75,12 +88,13 @@ const ArticleOptions = ({
               <button
                 className='py-2 hover:bg-gray-200 dark:hover:bg-[#262626]'
                 onClick={() => {
-                  console.log("delete");
                   setWarningContent({
                     proceedText: "Delete",
                     content: "Are you sure you want to delete this post?",
                     header: "You're about to delete a published article",
-                    proceed: deleteArticle,
+                    proceed: () => {
+                      deleteArticle();
+                    },
                     cancelText: "cancel",
                   });
                   setIsModalWarningOpen(true);
@@ -99,7 +113,6 @@ const ArticleOptions = ({
                       header: "You're about to pin this article to your blog",
                       proceed: () => {
                         pinArticle(article.id);
-                        setIsModalWarningOpen(false);
                         setIsPinned(true);
                       },
                       cancelText: "cancel",

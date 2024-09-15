@@ -8,6 +8,7 @@ import { FaChevronLeft } from "react-icons/fa6";
 import { redirect } from "next/dist/server/api-utils";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { createUserNotification } from "../_firebase/notifications";
 
 const SignInPage = () => {
   const router = useRouter();
@@ -35,6 +36,7 @@ const SignInPage = () => {
       userInfo.password
     );
     if (result) {
+      createUserNotification(result);
       router.push("/");
     } else if (error) {
       toast.error(error);
@@ -44,6 +46,7 @@ const SignInPage = () => {
   const handleGoogleLogin = async () => {
     const { result, error } = await signInWithGoogle();
     if (result) {
+      createUserNotification(result);
       router.push("/");
     } else if (error) {
       toast.error(error);

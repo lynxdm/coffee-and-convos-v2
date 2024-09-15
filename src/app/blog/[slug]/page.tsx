@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import { db } from "@/app/_firebase/config";
 import { Doc } from "@/app/_firebase/firestore";
 import Footer from "@/app/components/Footer";
@@ -15,6 +16,15 @@ import ReactMarkdown from "react-markdown";
 import useMenu from "@/app/hooks/useMenu";
 import { fetchArticleContent } from "@/app/_firebase/storage";
 import ArticleOptions from "@/app/components/ArticleOptions";
+import CommentSection from "@/app/components/CommentSection";
+
+// Dynamically import the ScrollToComments component (client-side only)
+const ScrollToComments = dynamic(
+  () => import("@/app/components/ScrollToComments"),
+  {
+    ssr: false, // Ensure it's only run on the client side
+  }
+);
 
 interface ArticleData extends Doc {
   id: string;
@@ -74,8 +84,18 @@ const SingleArticle = async ({ params }: { params: { slug: string } }) => {
           children={content}
           className='prose-lg mx-auto max-w-[50rem] break-words font-overpass md:prose-xl prose-headings:mb-4 prose-headings:mt-8 prose-headings:font-kreon prose-headings:font-bold prose-h2:font-extrabold prose-p:my-4 prose-li:list-disc lg:prose-h2:text-4xl'
         />
+        <section
+          id='comments'
+          className='mx-auto mt-8 max-w-[60rem] border-t px-3 pt-10 dark:border-darkSecondary md:px-8'
+        >
+          <h2 className='text-center text-2xl md:text-3xl font-kreon font-bold lg:text-4xl'>
+            Comments
+          </h2>
+          <CommentSection article={article} />
+        </section>
       </main>
       <Footer />
+      <ScrollToComments />
     </>
   );
 };

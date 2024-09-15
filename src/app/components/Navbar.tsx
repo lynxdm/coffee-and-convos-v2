@@ -15,7 +15,7 @@ import {
 import { BiLogoGmail } from "react-icons/bi";
 import { IoIosSunny } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
-import { TbLogout2 } from "react-icons/tb";
+import { TbLogin2, TbLogout2 } from "react-icons/tb";
 import { useGlobalContext } from "../contexts/AppContext";
 import useMenu from "../hooks/useMenu";
 import { genConfig } from "react-nice-avatar";
@@ -26,8 +26,13 @@ import { useWarningContext } from "../contexts/WarningModalContext";
 
 const Navbar = ({ bg }: { bg: string }) => {
   const router = useRouter();
-  const { admin, isAdmin, user, theme, setTheme } = useGlobalContext();
+  const { admin, isAdmin, user, theme, setTheme, userNotifications } =
+    useGlobalContext();
   const [imageError, setImageError] = useState(false);
+
+  const notificationNum = userNotifications.filter(
+    (notification: { read: boolean }) => !notification.read && notification
+  ).length;
 
   const sidebarRef = useRef(null);
   const sidebarBtn = useRef(null);
@@ -35,22 +40,38 @@ const Navbar = ({ bg }: { bg: string }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useMenu(sidebarBtn, sidebarRef);
 
   const currentPage = usePathname();
-  //  const [currentPage, setCurrentPage] = useState(pathname.slice(1));
 
   const userMenu = useRef<HTMLUListElement>(null);
   const userBtn = useRef<HTMLButtonElement>(null);
 
   const [isMenuOpen, setIsMenuOpen] = useMenu(userBtn, userMenu);
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [currentPage]);
+
   const config = genConfig(user?.email);
 
   return (
     <>
       <nav
         className={`z-20 flex w-full items-center justify-between ${
-          bg ? `bg-[${bg}]` : "bg-inherit"
+          bg ? `bg-[${bg}]` : "bg-none"
         } px-6 py-3 pt-4 text-primary lg:px-32 ${
           currentPage === "/" && "absolute"
-        }`}
+        }
+        ${
+          currentPage === "/notifications" &&
+          theme === "light" &&
+          "bg-[#f5f5f5]"
+        }
+        ${
+          currentPage === "/notifications/read" &&
+          theme === "light" &&
+          "bg-[#f5f5f5]"
+        }
+        ${currentPage === "/new" && "hidden"}
+        `}
       >
         <Link
           href={"/"}
@@ -98,7 +119,7 @@ const Navbar = ({ bg }: { bg: string }) => {
                     <img
                       src={user.photoURL}
                       alt={user.displayName + " display photo"}
-                      className='size-6 rounded-full lg:size-8'
+                      className='size-6 rounded-full object-cover lg:size-8'
                       onError={() => setImageError(true)}
                     />
                   ) : (
@@ -119,7 +140,7 @@ const Navbar = ({ bg }: { bg: string }) => {
                 ref={userMenu}
               >
                 <li className='w-full border-b pb-1 text-center text-[1.1rem] font-[500] dark:border-[#3a3a3a]'>
-                  {isAdmin ? admin.displayName : user.displayName}
+                  {user.displayName}
                 </li>
                 {isAdmin && (
                   <>
@@ -142,11 +163,11 @@ const Navbar = ({ bg }: { bg: string }) => {
                     <Link href={"/notifications"}>
                       <div className='relative'>
                         <LuBell className='size-5' />
-                        {/* {notificationNum > 0 && (
-                        <span className='absolute right-0 top-0 grid size-4 -translate-y-[50%] translate-x-[35%] place-items-center rounded-full bg-blue-700 text-[0.8rem] text-white'>
-                          {notificationNum}
-                        </span>
-                      )} */}
+                        {notificationNum > 0 && (
+                          <span className='absolute right-0 top-0 grid size-4 -translate-y-[50%] translate-x-[35%] place-items-center rounded-full bg-blue-700 text-[0.8rem] text-white'>
+                            {notificationNum}
+                          </span>
+                        )}
                       </div>
                       <p>notifications</p>
                     </Link>
@@ -192,7 +213,7 @@ const Navbar = ({ bg }: { bg: string }) => {
                 ) : (
                   <li className='rounded-lg px-2 hover:bg-gray-200 dark:hover:bg-[#262626]'>
                     <Link href={"/login"}>
-                      <LuBell className='size-5' />
+                      <TbLogin2 className='size-5' />
                       <p>Login</p>
                     </Link>
                   </li>

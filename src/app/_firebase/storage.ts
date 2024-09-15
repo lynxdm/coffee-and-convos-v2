@@ -1,3 +1,4 @@
+import { Ref, RefObject } from "react";
 import {
   deleteObject,
   getDownloadURL,
@@ -8,48 +9,35 @@ import { storage } from "./config";
 import { error } from "console";
 
 export const uploadProfileImage = async (e: any, profileId: string) => {
-  if (e.target.files[0]) {
-    let url,
-      error = null;
+  let result = { url: null as string | null, error: null as any };
 
+  if (e.target.files[0]) {
     try {
       const profileImage = e.target.files[0];
       const profileImageRef = ref(storage, `profile_photos/image-${profileId}`);
       const snapshot = await uploadBytes(profileImageRef, profileImage);
-      url = await getDownloadURL(snapshot.ref);
+      result.url = await getDownloadURL(snapshot.ref);
     } catch (err: any) {
       console.log(err);
-      error = err;
+      result.error = err;
     }
-    return { url, error };
   }
+  return result;
 };
 
 export const deleteProfileImage = async (profileId: string) => {
   let result,
     error = null;
-
-  const profileImageRef = ref(storage, `profile_photos/image-${profileId}`);
-
-  deleteObject(profileImageRef)
-    .then(() => {
-      result = true;
-    })
-    .catch((err) => {
-      console.log(err);
-      error = err;
-    });
+  try {
+    const profileImageRef = ref(storage, `profile_photos/image-${profileId}`);
+    await deleteObject(profileImageRef);
+    result = true;
+  } catch (err) {
+    console.log(err);
+    error = err;
+  }
 
   return { result, error };
-};
-
-export const changeProfileImage = (e: any, profileId: string) => {
-  try {
-    deleteProfileImage(profileId);
-    uploadProfileImage(e, profileId);
-  } catch (error) {
-    console.log(error);
-  }
 };
 
 export const fetchArticleContent = async (id: string, type: string) => {
@@ -74,4 +62,31 @@ export const fetchArticleContent = async (id: string, type: string) => {
     console.error("Error fetching article content:", error);
     throw new Error("Failed to fetch article content.");
   }
+};
+
+export const uploadCoverImage = async (e: any, id: string) => {
+  let result = { url: null as string | null, error: null as any };
+  try {
+    const coverImage = e.target.files[0];
+    const coverImageRef = ref(storage, `articles/${id}/cover`);
+    const snapshot = await uploadBytes(coverImageRef, coverImage);
+    result.url = await getDownloadURL(snapshot.ref);
+  } catch (error) {
+    result.error = error;
+  }
+  return result;
+};
+
+export const deleteCoverImage = async (id: string) => {
+  let result = { result: null as boolean | null, error: null as any };
+
+  try {
+    const coverImageRef = ref(storage, `articles/${id}/cover`);
+    await deleteObject(coverImageRef);
+    result.result = true;
+  } catch (error) {
+    result.error = error;
+  }
+
+  return result;
 };

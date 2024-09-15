@@ -8,12 +8,9 @@ import { toast } from "sonner";
 import { auth, storage } from "@/app/_firebase/config";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  uploadProfileImage,
-  deleteProfileImage,
-  changeProfileImage,
-} from "@/app/_firebase/storage";
+import { uploadProfileImage } from "@/app/_firebase/storage";
 import { signInWithGoogle, createUserWithEmail } from "@/app/_firebase/auth";
+import { createUserNotification } from "@/app/_firebase/notifications";
 
 interface UserInfo {
   email: string;
@@ -27,14 +24,17 @@ interface UserInfo {
 const SignUp = () => {
   const router = useRouter();
   const [userInfo, setUserInfo] = useState<UserInfo>(
-    JSON.parse(sessionStorage.getItem("userInfo") || "") || {
-      email: "",
-      firstName: "",
-      lastName: "",
-      password: "",
-      photoURL: "",
-      profileId: uuidv4(),
-    }
+    JSON.parse(
+      sessionStorage.getItem("userInfo") ||
+        JSON.stringify({
+          email: "",
+          firstName: "",
+          lastName: "",
+          password: "",
+          photoURL: "",
+          profileId: uuidv4(),
+        })
+    )
   );
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isUsingEmail, setIsUsingEmail] = useState<boolean>(false);
@@ -64,13 +64,7 @@ const SignUp = () => {
   };
 
   const handleChangePhoto = async (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      try {
-        changeProfileImage(e, userInfo.profileId);
-      } catch (error) {
-        toast.error("An error occurred");
-      }
-    }
+    handlePhotoUpload(e);
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -87,6 +81,7 @@ const SignUp = () => {
       userInfo.photoURL
     );
     if (result) {
+      createUserNotification(result);
       setUserInfo({
         email: "",
         firstName: "",
@@ -105,7 +100,17 @@ const SignUp = () => {
         <>
           <h2 className='mx-auto mb-4 text-2xl font-bold'>Hello there.</h2>
           <div className='flex flex-col gap-2 text-lg *:flex *:gap-3 *:rounded-[3rem] *:bg-primary *:px-12 *:py-4 *:font-semibold *:text-white dark:*:bg-[#262626] md:*:text-xl'>
-            <button onClick={signInWithGoogle}>
+            <button
+              onClick={async () => {
+                const { result, error } = await signInWithGoogle();
+                if (result) {
+                  createUserNotification(result);
+                  router.push("/");
+                } else if (error) {
+                  toast.error(error);
+                }
+              }}
+            >
               {" "}
               <svg className='size-6' viewBox='0 0 1152 1152'>
                 {" "}

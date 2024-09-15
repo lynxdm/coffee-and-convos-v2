@@ -17,15 +17,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className='font-overpass text-primary'>
-        <AppProvider>
+      <AppProvider>
+        <body className='dark:text-darkPrimary dark:bg-darkBg  bg-white font-overpass text-primary min-h-[100vh]'>
           <WarningModalProvider>
             <Navbar bg='' />
             <Toaster richColors position='top-right' />
             {children}
           </WarningModalProvider>
-        </AppProvider>
-      </body>
+        </body>
+      </AppProvider>
     </html>
   );
 }
