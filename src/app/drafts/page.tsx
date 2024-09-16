@@ -5,7 +5,6 @@ import { db } from "../_firebase/config";
 
 const Drafts = async () => {
   const articles = await getArticles(collection(db, "drafts"));
-  console.log(articles);
 
   return (
     <main>

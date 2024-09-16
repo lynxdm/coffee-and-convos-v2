@@ -23,19 +23,24 @@ interface UserInfo {
 
 const SignUp = () => {
   const router = useRouter();
-  const [userInfo, setUserInfo] = useState<UserInfo>(
-    JSON.parse(
-      sessionStorage.getItem("userInfo") ||
-        JSON.stringify({
-          email: "",
-          firstName: "",
-          lastName: "",
-          password: "",
-          photoURL: "",
-          profileId: uuidv4(),
-        })
-    )
-  );
+  const [userInfo, setUserInfo] = useState<UserInfo>({
+    email: "",
+    firstName: "",
+    lastName: "",
+    password: "",
+    photoURL: "",
+    profileId: uuidv4(),
+  });
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUser = sessionStorage.getItem("userInfo");
+      if (storedUser) {
+        setUserInfo(JSON.parse(storedUser));
+      }
+    }
+  }, []);
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isUsingEmail, setIsUsingEmail] = useState<boolean>(false);
 

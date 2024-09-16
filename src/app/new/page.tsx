@@ -33,17 +33,22 @@ const New = () => {
     content: "",
   });
 
-  const [articleDraft, setArticleDraft] = useState<ArticleDraft>(
-    JSON.parse(
-      localStorage.getItem("articleDraft") ||
-        JSON.stringify({
-          coverImg: "",
-          title: "",
-          content: "",
-          details: { type: "new", id: v4().split("-").join("") },
-        })
-    )
-  );
+  const [articleDraft, setArticleDraft] = useState<ArticleDraft>({
+    coverImg: "",
+    title: "",
+    content: "",
+    publishDate: "",
+    details: { type: "new", id: v4().split("-").join("") },
+  });
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedDraft = localStorage.getItem("articleDraft");
+      if (storedDraft) {
+        setArticleDraft(JSON.parse(storedDraft));
+      }
+    }
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("articleDraft", JSON.stringify(articleDraft));
