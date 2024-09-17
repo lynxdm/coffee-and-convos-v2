@@ -11,6 +11,8 @@ import {
   deleteDoc,
   addDoc,
   setDoc,
+  QuerySnapshot,
+  DocumentData,
 } from "firebase/firestore";
 import { db } from "./config";
 import { sendNotification } from "./notifications";
@@ -35,6 +37,10 @@ export interface ArticleDraft {
   publishDate: string;
 }
 
+export interface ArticleData extends Doc {
+  id: string;
+}
+
 export const publishArticle = async (data: {}, id: string, path: string) => {
   try {
     let articleRef = doc(db, path, id);
@@ -42,6 +48,21 @@ export const publishArticle = async (data: {}, id: string, path: string) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const getArticle = async (q: Query): Promise<ArticleData | null> => {
+  const docSnap: QuerySnapshot<DocumentData> = await getDocs(q);
+
+  if (!docSnap.empty) {
+    const doc = docSnap.docs[0];
+
+    return {
+      id: doc.id,
+      ...(doc.data() as Omit<ArticleData, "id">),
+    };
+  }
+
+  return null;
 };
 
 export const getArticles = async (articlesRef: Query): Promise<Doc[]> => {

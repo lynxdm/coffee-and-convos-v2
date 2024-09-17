@@ -17,6 +17,12 @@ import useMenu from "@/app/hooks/useMenu";
 import { fetchArticleContent } from "@/app/_firebase/storage";
 import ArticleOptions from "@/app/components/ArticleOptions";
 import CommentSection from "@/app/components/CommentSection";
+import Image from "next/image";
+import { notFound } from "next/navigation";
+import { title } from "process";
+import { Metadata } from "next";
+import { getArticle } from "@/app/_firebase/firestore";
+import { ArticleData } from "@/app/_firebase/firestore";
 
 // Dynamically import the ScrollToComments component (client-side only)
 const ScrollToComments = dynamic(
@@ -26,24 +32,51 @@ const ScrollToComments = dynamic(
   }
 );
 
-interface ArticleData extends Doc {
-  id: string;
+export async function generateStaticParams() {
+  const articles = await getDocs(collection(db, "articles"));
+  return articles.docs.map((d) => {
+    slug: d.data().publishLink;
+  });
 }
 
-const getArticle = async (q: Query): Promise<ArticleData | null> => {
-  const docSnap: QuerySnapshot<DocumentData> = await getDocs(q);
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
+  try {
+    const article = await getArticle(
+      query(collection(db, "articles"), where("publishLink", "==", params.slug))
+    );
 
-  if (!docSnap.empty) {
-    const doc = docSnap.docs[0];
+    if (!article) {
+      return {
+        title: "Not found",
+        description: "The page you're looking for doesn't exist",
+      };
+    }
 
     return {
-      id: doc.id,
-      ...(doc.data() as Omit<ArticleData, "id">),
+      title: article.title,
+      description: "Article by Adesegun Adefunke",
+      creator: "Adesegun Adefunke",
+      alternates: {
+        canonical: `/blog/${article.publishLink}`,
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: article.title,
+        description: "Article by Adesegun Adefunke",
+        creator: "@iyamfunky",
+      },
+    };
+  } catch (error) {
+    return {
+      title: "Not found",
+      description: "The page you're looking for doesn't exist",
     };
   }
-
-  return null;
-};
+}
 
 const SingleArticle = async ({ params }: { params: { slug: string } }) => {
   const q = query(
@@ -52,9 +85,7 @@ const SingleArticle = async ({ params }: { params: { slug: string } }) => {
   );
   const article = await getArticle(q);
 
-  if (!article) {
-    throw new Error("Article not found");
-  }
+  if (!article) notFound();
 
   const content = await fetchArticleContent(article.id, "articles");
 
@@ -74,10 +105,13 @@ const SingleArticle = async ({ params }: { params: { slug: string } }) => {
           </div>
         </div>
         <div className='relative grid place-items-center border-primary py-10 pb-4 lg:py-12 lg:pb-8'>
-          <img
+          <Image
+            width={3255}
+            height={2449}
+            priority
             src={article.cover.image}
             alt={article.cover.alt}
-            className='aspect-[16/9] w-[60rem] rounded-lg object-cover object-center'
+            className='rounded-lg w-[60rem] aspect-[16/9] object-cover object-center'
           />
         </div>
         <ReactMarkdown

@@ -48,6 +48,7 @@ const Navbar = ({ bg }: { bg: string }) => {
 
   useEffect(() => {
     setIsMenuOpen(false);
+    setIsSidebarOpen(false);
   }, [currentPage]);
 
   const config = genConfig(user?.email);

@@ -6,8 +6,18 @@ import { Toaster } from "sonner";
 import WarningModalProvider from "./contexts/WarningModalContext";
 
 export const metadata: Metadata = {
-  title: "Coffee & Convos",
+  metadataBase: new URL("https://coffee-and-convos.vercel.app"),
+  title: {
+    default: "Coffee & Convos",
+    template: `%s - Coffee & Convos`,
+  },
   description: "A personal blog by the betawriter",
+  creator: "Adesegun Adefunke",
+  openGraph: {
+    url: "https://coffee-and-convos.vercel.app",
+    siteName: "Coffee & Convos",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

@@ -17,8 +17,10 @@ import Footer from "./components/Footer";
 
 export default async function Home() {
   const articles = await getArticles(
-    query(collection(db, "articles"), orderBy("date", "desc"), limit(6))
+    query(collection(db, "articles"), orderBy("date", "desc"), limit(7))
   );
+
+  console.log(articles);
 
   return (
     <>
