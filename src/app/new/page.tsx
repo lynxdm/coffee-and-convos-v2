@@ -1,26 +1,21 @@
 "use client";
-import { useState, useEffect, ChangeEvent, Ref } from "react";
-import {
-  deleteObject,
-  getDownloadURL,
-  ref,
-  listAll,
-  uploadBytes,
-} from "firebase/storage";
+import { useState, useEffect, ChangeEvent, useRef } from "react";
+import { deleteObject, ref, listAll, uploadBytes } from "firebase/storage";
 import { db, storage } from "../_firebase/config";
 import { ScaleLoader } from "react-spinners";
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { useWarningContext } from "../contexts/WarningModalContext";
-import Link from "next/link";
 import { publishArticle } from "../_firebase/firestore";
 import { v4 } from "uuid";
 import { useRouter } from "next/navigation";
 import EditorNav from "./EditorNav";
-import { FaXmark } from "react-icons/fa6";
 import { formatLink } from "../_lib/accessoryFunctions";
 import Editor from "./Editor";
 import Preview from "./Preview";
 import { ArticleDraft } from "../_firebase/firestore";
+import { getTags, Tags } from "../_firebase/firestore";
+import PostOptions from "./PostOptions";
+import Loader from "../components/PageLoader";
 
 const New = () => {
   const router = useRouter();
@@ -33,22 +28,39 @@ const New = () => {
     content: "",
   });
 
-  const [articleDraft, setArticleDraft] = useState<ArticleDraft>({
+  const [tags, setTags] = useState<Tags[]>([]);
+
+  useEffect(() => {
+    getTags().then((result) => {
+      console.log(result);
+      setTags(result);
+    });
+  }, []);
+
+  const initialDraft = {
     coverImg: "",
     title: "",
     content: "",
     publishDate: "",
+    selectedTags: [],
+    seoTitle: "",
+    seoDescription: "",
+    canonicalUrl: "",
     details: { type: "new", id: v4().split("-").join("") },
+  };
+
+  const [articleDraft, setArticleDraft] = useState(() => {
+    if (typeof window !== "undefined") {
+      return JSON.parse(
+        localStorage.getItem("articleDraft") || JSON.stringify(initialDraft)
+      );
+    }
+    return initialDraft;
   });
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedDraft = localStorage.getItem("articleDraft");
-      if (storedDraft) {
-        setArticleDraft(JSON.parse(storedDraft));
-      }
-    }
-  }, []);
+    localStorage.setItem("articleDraft", JSON.stringify(articleDraft));
+  }, [articleDraft]);
 
   useEffect(() => {
     localStorage.setItem("articleDraft", JSON.stringify(articleDraft));
@@ -65,7 +77,9 @@ const New = () => {
     }
   }, [errorComponent]);
 
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
     const { name, value } = e.target;
 
     setArticleDraft({ ...articleDraft, [name]: value });
@@ -210,9 +224,9 @@ const New = () => {
             <Preview articleDraft={articleDraft} />
           )}
         </section>
-        <div className='flex items-center gap-2 px-3 pb-4 *:rounded-md *:px-4 *:py-[0.4rem]'>
+        <div className='flex items-center gap-2 px-3 pb-4'>
           {isLoading.show ? (
-            <div className='flex gap-2 bg-blue-700 font-semibold text-white'>
+            <div className='flex gap-2 rounded-md px-4 py-[0.4rem] bg-blue-700 font-semibold text-white'>
               <ScaleLoader
                 color='rgba(256, 256, 256, 1)'
                 height={12}
@@ -223,15 +237,16 @@ const New = () => {
             </div>
           ) : (
             <>
-              <button
-                className='bg-blue-700 font-semibold text-white hover:bg-blue-800'
-                onClick={() => handlePublishing("articles")}
-              >
-                Publish
-              </button>
+              <PostOptions
+                tags={tags}
+                articleDraft={articleDraft}
+                setArticleDraft={setArticleDraft}
+                handleChange={handleChange}
+                handlePublishing={handlePublishing}
+              />
               {articleDraft.details.type !== "articles" && (
                 <button
-                  className='hover:bg-gray-300 dark:hover:bg-[#262626]'
+                  className='hover:bg-gray-300 rounded-md px-4 py-[0.4rem] dark:hover:bg-[#262626]'
                   onClick={() => handlePublishing("drafts")}
                 >
                   Save draft
@@ -239,7 +254,7 @@ const New = () => {
               )}
               {articleDraft.details.type === "drafts" && (
                 <button
-                  className='self-end bg-red-600 text-white hover:bg-red-700'
+                  className='self-end bg-red-600 rounded-md px-4 py-[0.4rem] text-white hover:bg-red-700'
                   onClick={() => {
                     setWarningContent({
                       proceed: deleteDraft,

@@ -72,7 +72,7 @@ const CommentItem = ({
   const manageCommentBtn = useRef(null);
   const manageCommentMenu = useRef(null);
 
-  const [isMenuOpen, setIsMenuOpen] = useMenu(
+  const { isMenuOpen, setIsMenuOpen } = useMenu(
     manageCommentBtn,
     manageCommentMenu
   );

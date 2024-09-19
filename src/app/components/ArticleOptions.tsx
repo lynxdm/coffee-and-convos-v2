@@ -28,7 +28,7 @@ const ArticleOptions = ({
 
   const manageMenuRef = useRef(null);
   const manageBtnRef = useRef(null);
-  const [isMenuOpen, setIsMenuOpen] = useMenu(manageBtnRef, manageMenuRef);
+  const { isMenuOpen, setIsMenuOpen } = useMenu(manageBtnRef, manageMenuRef);
 
   const handleEditing = () => {
     const { cover, title, date, id } = article;

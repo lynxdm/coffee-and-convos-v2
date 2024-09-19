@@ -3,15 +3,18 @@ import { Ref, useEffect } from "react";
 
 const useTextarea = (
   textAreaRef: Ref<HTMLTextAreaElement>,
-  newText: string
+  newText: string,
+  initialHeight: string
 ) => {
   useEffect(() => {
     if (textAreaRef && "current" in textAreaRef && textAreaRef.current) {
-      textAreaRef.current.style.height = "70px";
-      const scrollHeight = textAreaRef.current.scrollHeight;
-      textAreaRef.current.style.height = scrollHeight + "px";
+      textAreaRef.current.style.height = initialHeight;
+      if (newText) {
+        const scrollHeight = textAreaRef.current.scrollHeight;
+        textAreaRef.current.style.height = scrollHeight + "px";
+      }
     }
-  }, [textAreaRef, newText]);
+  }, [textAreaRef, newText, initialHeight]);
 };
 
 export default useTextarea;

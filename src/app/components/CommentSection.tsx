@@ -29,7 +29,7 @@ const CommentSection = ({ article }: { article: Doc }) => {
   };
 
   const newCommentRef = useRef(null);
-  useTextarea(newCommentRef, newComment);
+  useTextarea(newCommentRef, newComment, "70px");
 
   useEffect(() => {
     updateComments();

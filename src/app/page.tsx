@@ -20,8 +20,6 @@ export default async function Home() {
     query(collection(db, "articles"), orderBy("date", "desc"), limit(7))
   );
 
-  console.log(articles);
-
   return (
     <>
       <main>

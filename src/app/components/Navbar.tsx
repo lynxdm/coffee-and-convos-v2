@@ -37,14 +37,15 @@ const Navbar = ({ bg }: { bg: string }) => {
   const sidebarRef = useRef(null);
   const sidebarBtn = useRef(null);
 
-  const [isSidebarOpen, setIsSidebarOpen] = useMenu(sidebarBtn, sidebarRef);
+  const { isMenuOpen: isSidebarOpen, setIsMenuOpen: setIsSidebarOpen } =
+    useMenu(sidebarBtn, sidebarRef);
 
   const currentPage = usePathname();
 
   const userMenu = useRef<HTMLUListElement>(null);
   const userBtn = useRef<HTMLButtonElement>(null);
 
-  const [isMenuOpen, setIsMenuOpen] = useMenu(userBtn, userMenu);
+  const { isMenuOpen, setIsMenuOpen } = useMenu(userBtn, userMenu);
 
   useEffect(() => {
     setIsMenuOpen(false);

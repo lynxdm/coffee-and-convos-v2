@@ -2,13 +2,14 @@
 import React, { useState, useEffect, Ref, RefObject } from "react";
 
 function useMenu(
-  btn: RefObject<HTMLButtonElement>,
-  menu: RefObject<HTMLUListElement>
+  btn: RefObject<HTMLButtonElement | HTMLInputElement>,
+  menu: RefObject<HTMLUListElement | HTMLDivElement>
 ) {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   const handleMenu = (e: MouseEvent) => {
     const target = e.target as Node;
+    console.log(target);
     if (!btn?.current?.contains(target) && !menu?.current?.contains(target)) {
       setIsMenuOpen(false);
     }
@@ -24,7 +25,7 @@ function useMenu(
     };
   }, [isMenuOpen]);
 
-  return [isMenuOpen, setIsMenuOpen];
+  return { isMenuOpen, setIsMenuOpen };
 }
 
 export default useMenu;

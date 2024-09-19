@@ -27,8 +27,8 @@ const Editor = ({
   const textAreaRef = useRef(null);
   const titleText = useRef(null);
 
-  useTextarea(textAreaRef, articleDraft.content);
-  useTextarea(titleText, articleDraft.title);
+  useTextarea(textAreaRef, articleDraft.content, "70px");
+  useTextarea(titleText, articleDraft.title, "70px");
 
   const headingsDropdown = useRef(null);
   const headingsButton = useRef(null);

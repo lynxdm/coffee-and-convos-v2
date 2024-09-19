@@ -13,6 +13,7 @@ import {
   setDoc,
   QuerySnapshot,
   DocumentData,
+  orderBy,
 } from "firebase/firestore";
 import { db } from "./config";
 import { sendNotification } from "./notifications";
@@ -35,10 +36,20 @@ export interface ArticleDraft {
     id: string;
   };
   publishDate: string;
+  selectedTags: Array<string>;
+  seoTitle: string;
+  seoDescription: string;
+  canonicalUrl: string;
 }
 
 export interface ArticleData extends Doc {
   id: string;
+}
+
+export interface Tags {
+  id: string;
+  title: string;
+  articles: Array<string>;
 }
 
 export const publishArticle = async (data: {}, id: string, path: string) => {
@@ -75,6 +86,24 @@ export const getArticles = async (articlesRef: Query): Promise<Doc[]> => {
   });
 
   return articlesArr;
+};
+
+export const getTags = async (): Promise<Tags[]> => {
+  try {
+    const snapshot = await getDocs(
+      query(collection(db, "tags"), orderBy("title", "asc"))
+    );
+    const tags: Tags[] = [];
+
+    snapshot.forEach((doc) => {
+      const data = doc.data() as Omit<Tags, "id">;
+      tags.push({ ...data, id: doc.id });
+    });
+
+    return tags;
+  } catch (error) {
+    throw new Error("Error getting tags");
+  }
 };
 
 export const unpinArticles = async () => {
