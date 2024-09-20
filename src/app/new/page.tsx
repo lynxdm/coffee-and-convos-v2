@@ -15,12 +15,23 @@ import Preview from "./Preview";
 import { ArticleDraft } from "../_firebase/firestore";
 import { getTags, Tags } from "../_firebase/firestore";
 import PostOptions from "./PostOptions";
-import Loader from "../components/PageLoader";
+
+const initialDraft = {
+  coverImg: "",
+  title: "",
+  content: "",
+  publishDate: "",
+  selectedTags: [],
+  seoTitle: "",
+  seoDescription: "",
+  canonicalUrl: "",
+  details: { type: "new", id: v4().split("-").join("") },
+};
 
 const New = () => {
   const router = useRouter();
   const { setIsModalWarningOpen, setWarningContent } = useWarningContext();
-
+  const [articleDraft, setArticleDraft] = useState<ArticleDraft>(initialDraft);
   const [isLoading, setIsLoading] = useState({ show: false, message: "" });
   const [isWriting, setIsWriting] = useState(true);
   const [errorComponent, setErrorComponent] = useState({
@@ -30,41 +41,23 @@ const New = () => {
 
   const [tags, setTags] = useState<Tags[]>([]);
 
+ useEffect(() => {
+   if (typeof window !== undefined) {
+     let savedDraft = localStorage.getItem("articleDraft");
+     if (savedDraft) setArticleDraft(JSON.parse(savedDraft));
+   }
+ }, []);
+
+ useEffect(() => {
+   localStorage.setItem("articleDraft", JSON.stringify(articleDraft));
+ }, [articleDraft]);
+
   useEffect(() => {
     getTags().then((result) => {
       console.log(result);
       setTags(result);
     });
   }, []);
-
-  const initialDraft = {
-    coverImg: "",
-    title: "",
-    content: "",
-    publishDate: "",
-    selectedTags: [],
-    seoTitle: "",
-    seoDescription: "",
-    canonicalUrl: "",
-    details: { type: "new", id: v4().split("-").join("") },
-  };
-
-  const [articleDraft, setArticleDraft] = useState(() => {
-    if (typeof window !== "undefined") {
-      return JSON.parse(
-        localStorage.getItem("articleDraft") || JSON.stringify(initialDraft)
-      );
-    }
-    return initialDraft;
-  });
-
-  useEffect(() => {
-    localStorage.setItem("articleDraft", JSON.stringify(articleDraft));
-  }, [articleDraft]);
-
-  useEffect(() => {
-    localStorage.setItem("articleDraft", JSON.stringify(articleDraft));
-  }, [articleDraft]);
 
   useEffect(() => {
     if (errorComponent.show) {
