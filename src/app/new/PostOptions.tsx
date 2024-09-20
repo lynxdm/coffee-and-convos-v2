@@ -67,7 +67,7 @@ const PostOptions = ({
   return (
     <div className='relative'>
       <button
-        className='bg-blue-700 font-semibold text-white rounded-md px-4 py-[0.4rem] hover:bg-blue-800'
+        className='bg-blue-700 dark:bg-blue-800 dark:hover:bg-blue-700 font-semibold text-white rounded-md px-4 py-[0.4rem] hover:bg-blue-800'
         onClick={() => setIsPublishing(!isPublishing)}
         ref={publishBtn}
       >
@@ -75,23 +75,25 @@ const PostOptions = ({
       </button>
       <div
         ref={publishMenu}
-        className={`absolute border shadow-md flex-col gap-2 bg-white top-0 left-0 -translate-y-[102%] rounded-lg w-[25rem] p-4 [&_div_label]:font-inter [&_div_label]:text- [&_div_label]:font-semibold [&_div]:flex [&_div]:flex-col [&_div]:gap-[0.25rem] [&_div_input]:border [&_div_input]:rounded-md [&_div_input]:p-2 [&_div_textarea]:border [&_div_textarea]:rounded-md [&_div_textarea]:p-2 ${
+        className={`post-options w-[93vw] max-w-[25rem] ${
           isPublishing ? "flex" : "hidden"
-        }`}
+        } post-options-dark`}
       >
         <h3 className='text-xl font-bold font-inter mb-4'>Post options</h3>
         <div>
-          <label htmlFor='tags'>Select tags</label>
+          <label htmlFor='tags' className='post-options-label-style'>
+            Select tags
+          </label>
           <ul className='flex gap-2 flex-wrap'>
             {articleDraft.selectedTags.map((tag, index) => {
               return (
                 <li
                   key={index}
-                  className='flex rounded px-1 gap-2 py-[0.3rem] bg-[#6f727518]'
+                  className='flex rounded px-1 dark:bg-[#171770b6] gap-2 py-[0.3rem] bg-[#6f727518]'
                 >
-                  <p className='text-gray-600'>#{tag}</p>
+                  <p className='text-gray-600 dark:text-[#eaeaea]'>#{tag}</p>
                   <button className='hover:*:text-[#df1919]'>
-                    <FaXmark className='size-5' />
+                    <FaXmark className='size-5 dark:text-[#eaeaea]' />
                   </button>
                 </li>
               );
@@ -107,15 +109,16 @@ const PostOptions = ({
               onClick={() => setIsTagInputFocused(true)}
               onChange={(e) => setTagSearch(e.target.value)}
               placeholder='Start typing to search'
+              className='post-options-input-style'
             />
             {isTagInputFocused && (
               <div
-                className='max-h-[15rem] absolute bottom-0 translate-y-[102%] w-full bg-white border overflow-y-scroll rounded-lg  scrollbar-thin shadow-lg'
+                className='max-h-[15rem] absolute bottom-0 translate-y-[103%] w-full bg-white border dark:bg-[#090909] overflow-y-scroll rounded-lg  scrollbar-thin shadow-lg dark:border-[#3a3a3a] dark:scrollbar-track-[#232425] dark:scrollbar-thumb-[#535253] '
                 ref={filteredSearchTags}
               >
                 {!tagSearch && (
                   <div>
-                    <h4 className='text-lg mx-2 font-inter font-bold px-2 py-4 border-b'>
+                    <h4 className='text-lg mx-2 font-inter font-bold px-2 py-4 border-b dark:border-[#3a3a3a]'>
                       Previous Tags
                     </h4>
                   </div>
@@ -135,11 +138,11 @@ const PostOptions = ({
                         setTagSearch("");
                         tagInput.current?.focus();
                       }}
-                      className='flex p-2 items-start flex-col gap-1 hover:bg-[#888b8e26] [&_.font-semibold]:text-[#2525b8]'
+                      className='flex p-2 items-start flex-col gap-1 hover:bg-[#888b8e26] [&_.font-semibold]:text-[#2525b8] dark:hover:bg-[#1717702f]'
                     >
                       <p className='font-semibold'>#{tag.title}</p>
                       {tag?.articles?.length > 0 && (
-                        <p className='text-sm'>
+                        <p className='text-sm dark:text-[#7a7a7b]'>
                           {tag.articles.length}{" "}
                           {tag.articles.length > 1 ? "articles" : "article"}
                         </p>
@@ -152,32 +155,38 @@ const PostOptions = ({
           </div>
         </div>
         <div>
-          <label htmlFor='seoTitle'>SEO title</label>
+          <label htmlFor='seoTitle' className='post-options-label-style'>
+            SEO title
+          </label>
           <textarea
             name='seoTitle'
             id='seoTitle'
             ref={seoTitleRef}
             value={articleDraft.seoTitle}
-            className='resize-none w-full overflow-hidden'
+            className='post-options-textarea-style resize-none w-full overflow-hidden'
             onChange={handleChange}
             placeholder='Enter meta title'
           />
         </div>
         <div>
-          <label htmlFor='seoDescription'>SEO description</label>
+          <label htmlFor='seoDescription' className='post-options-label-style'>
+            SEO description
+          </label>
           <textarea
             name='seoDescription'
             id='seoDescription'
             ref={seoDescriptionRef}
             onChange={handleChange}
             value={articleDraft.seoDescription}
-            className='resize-none w-full overflow-hidden'
+            className='post-options-textarea-style resize-none w-full overflow-hidden'
             placeholder='Enter meta description'
           />
         </div>
         <div>
-          <label htmlFor='canonicalUrl'>Canonical URL</label>
-          <p className='text-md text-gray-500 -mt-1'>
+          <label htmlFor='canonicalUrl' className='post-options-label-style'>
+            Canonical URL
+          </label>
+          <p className='text-md text-gray-500 dark:text-white -mt-1'>
             Change <code>canonical_url</code> meta tag if this article was first
             published elsewhere
           </p>
@@ -187,10 +196,11 @@ const PostOptions = ({
             id='canonicalUrl'
             onChange={handleChange}
             placeholder='Enter original url'
+            className='post-options-input-style'
           />
         </div>
         <button
-          className='w-full py-[0.5rem] rounded-md bg-blue-700 text-white font-semibold hover:bg-blue-800 mt-6'
+          className='w-full py-[0.5rem] rounded-md bg-blue-700 text-white font-semibold hover:bg-blue-800 dark:bg-[#2a2a7dcb] dark:hover:bg-blue-800 mt-4'
           onClick={() => {
             setIsPublishing(false);
             handlePublishing("articles");
