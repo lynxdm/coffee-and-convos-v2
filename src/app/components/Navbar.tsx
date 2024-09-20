@@ -224,7 +224,7 @@ const Navbar = ({ bg }: { bg: string }) => {
             </div>
             <button
               className={`text-primary dark:md:text-darkPrimary lg:hidden ${
-                currentPage !== "" && "dark:text-darkPrimary"
+                currentPage !== "/" && "dark:text-darkPrimary"
               }`}
               ref={sidebarBtn}
               onClick={() => setIsSidebarOpen(true)}
