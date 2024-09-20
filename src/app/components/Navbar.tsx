@@ -22,11 +22,10 @@ import { genConfig } from "react-nice-avatar";
 import ReactNiceAvatar from "react-nice-avatar";
 import { toast } from "sonner";
 import { signUserOut } from "../_firebase/auth";
-import { useWarningContext } from "../contexts/WarningModalContext";
 
 const Navbar = ({ bg }: { bg: string }) => {
   const router = useRouter();
-  const { admin, isAdmin, user, theme, setTheme, userNotifications } =
+  const { isAdmin, user, theme, setTheme, userNotifications } =
     useGlobalContext();
   const [imageError, setImageError] = useState(false);
 
@@ -50,7 +49,7 @@ const Navbar = ({ bg }: { bg: string }) => {
   useEffect(() => {
     setIsMenuOpen(false);
     setIsSidebarOpen(false);
-  }, [currentPage]);
+  }, [currentPage, setIsMenuOpen, setIsSidebarOpen]);
 
   const config = genConfig(user?.email);
 
@@ -130,7 +129,7 @@ const Navbar = ({ bg }: { bg: string }) => {
                 ) : (
                   <FaUserCircle
                     className={`text-primary size-6 dark:md:text-darkPrimary ${
-                      currentPage !== "" && "dark:text-darkPrimary"
+                      currentPage !== "/" && "dark:text-darkPrimary"
                     }`}
                   />
                 )}

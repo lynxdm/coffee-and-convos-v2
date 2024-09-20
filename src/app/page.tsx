@@ -92,7 +92,11 @@ export default async function Home() {
           <article className='grid gap-12 md:grid-cols-2 md:gap-10 xl:grid-cols-3'>
             {articles?.map((article) => {
               return (
-                <ArticleCard {...article} key={article.id} type='articles' />
+                <ArticleCard
+                  article={article}
+                  key={article.id}
+                  type='articles'
+                />
               );
             })}
           </article>

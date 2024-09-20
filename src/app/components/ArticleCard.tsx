@@ -5,23 +5,21 @@ import ReactMarkdown from "react-markdown";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Timestamp } from "firebase/firestore";
 import { fetchArticleContent } from "../_firebase/storage";
 import { timeAgo, formatLink } from "../_lib/accessoryFunctions";
+import { ArticleDraft, Doc } from "../_firebase/firestore";
 
-const ArticleCard = ({
-  title,
-  cover,
-  date,
-  id,
-  type,
-}: {
-  title: string;
-  cover: { alt: string; image: string };
-  date: string;
-  id: string;
-  type: string;
-}) => {
+const ArticleCard = ({ type, article }: { type: string; article: Doc }) => {
+  const {
+    title,
+    cover,
+    date,
+    id,
+    canonicalUrl,
+    seoDescription,
+    seoTitle,
+    tags,
+  } = article;
   const router = useRouter();
   const [content, setContent] = useState("");
 
@@ -29,14 +27,19 @@ const ArticleCard = ({
     fetchArticleContent(id, type).then((result) => {
       if (result) setContent(result);
     });
-  }, []);
+  }, [id, type]);
 
   const handleEditing = () => {
-    let articleDraft = {
+    const articleDraft: ArticleDraft = {
       coverImg: cover.image,
       title: title,
       content: content,
       details: { type: "drafts", id: id },
+      canonicalUrl,
+      seoDescription,
+      seoTitle,
+      selectedTags: tags,
+      publishDate: "",
     };
 
     localStorage.setItem("articleDraft", JSON.stringify(articleDraft));
@@ -88,10 +91,9 @@ const ArticleCard = ({
           />
         </li>
         <li className='mt-6 px-2'>
-          <ReactMarkdown
-            children={content}
-            className='prose line-clamp-3 leading-loose prose-headings:hidden prose-p:my-0 prose-img:hidden dark:text-darkSecondary'
-          />
+          <ReactMarkdown className='prose line-clamp-3 leading-loose prose-headings:hidden prose-p:my-0 prose-img:hidden dark:text-darkSecondary'>
+            {content}
+          </ReactMarkdown>
         </li>
       </ul>
     );

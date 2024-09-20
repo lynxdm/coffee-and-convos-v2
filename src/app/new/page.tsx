@@ -1,9 +1,15 @@
 "use client";
-import { useState, useEffect, ChangeEvent, useRef } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { deleteObject, ref, listAll, uploadBytes } from "firebase/storage";
 import { db, storage } from "../_firebase/config";
 import { ScaleLoader } from "react-spinners";
-import { deleteDoc, doc, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import { useWarningContext } from "../contexts/WarningModalContext";
 import { publishArticle } from "../_firebase/firestore";
 import { v4 } from "uuid";
@@ -41,20 +47,19 @@ const New = () => {
 
   const [tags, setTags] = useState<Tags[]>([]);
 
- useEffect(() => {
-   if (typeof window !== undefined) {
-     let savedDraft = localStorage.getItem("articleDraft");
-     if (savedDraft) setArticleDraft(JSON.parse(savedDraft));
-   }
- }, []);
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      const savedDraft = localStorage.getItem("articleDraft");
+      if (savedDraft) setArticleDraft(JSON.parse(savedDraft));
+    }
+  }, []);
 
- useEffect(() => {
-   localStorage.setItem("articleDraft", JSON.stringify(articleDraft));
- }, [articleDraft]);
+  useEffect(() => {
+    localStorage.setItem("articleDraft", JSON.stringify(articleDraft));
+  }, [articleDraft]);
 
   useEffect(() => {
     getTags().then((result) => {
-      console.log(result);
       setTags(result);
     });
   }, []);
@@ -76,6 +81,23 @@ const New = () => {
     const { name, value } = e.target;
 
     setArticleDraft({ ...articleDraft, [name]: value });
+  };
+
+  const checkTags = async () => {
+    try {
+      for (const tag of articleDraft.selectedTags) {
+        const checkTag = tags.find((item) => item.title === tag);
+        if (!checkTag) {
+          const tagData = {
+            title: tag,
+            articles: [formatLink(articleDraft.title)],
+          };
+          await addDoc(collection(db, "tags"), tagData);
+        }
+      }
+    } catch (error) {
+      console.error("Error adding tags: ", error);
+    }
   };
 
   const handlePublishing = (type: string) => {
@@ -106,6 +128,10 @@ const New = () => {
           : new Date().toISOString()
       }`,
       publishLink: formatLink(articleDraft.title),
+      tags: articleDraft.selectedTags,
+      seoTitle: articleDraft.seoTitle,
+      canonicalUrl: articleDraft.canonicalUrl,
+      seoDescription: articleDraft.seoDescription,
     };
 
     const markdownContent = new Blob([articleDraft.content], {
@@ -134,19 +160,21 @@ const New = () => {
 
     //  upload markdown
     uploadBytes(markdownRef, markdownContent)
-      .then((snapshot) => {
+      .then(() => {
         if (articleDraft.details.type === "article") {
           updateDoc(
             doc(db, `articles/${articleDraft.details.id}`),
             articleData
           );
+          checkTags();
           localStorage.removeItem("articleDraft");
-          router.push("/");
+          router.push("/blog");
           return;
         }
         publishArticle(articleData, articleDraft.details.id, type);
+        checkTags();
         localStorage.removeItem("articleDraft");
-        router.push(`${type === "articles" ? "/" : "/drafts"}`);
+        router.push(`${type === "articles" ? "/blog" : "/drafts"}`);
       })
       .catch((error) => {
         setErrorComponent({

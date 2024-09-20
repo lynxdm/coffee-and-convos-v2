@@ -8,8 +8,6 @@ import { getArticles } from "../_firebase/firestore";
 import { collection, orderBy, query } from "firebase/firestore";
 import { db } from "../_firebase/config";
 import { timeAgo } from "../_lib/accessoryFunctions";
-import Loader from "../components/PageLoader";
-import { Suspense } from "react";
 import { formatLink } from "../_lib/accessoryFunctions";
 import { fetchArticleContent } from "../_firebase/storage";
 import Image from "next/image";
@@ -53,10 +51,9 @@ const Blog = async () => {
                 </h2>
                 <FiArrowUpRight className='size-6' />
               </Link>
-              <ReactMarkdown
-                children={previewContent}
-                className='prose line-clamp-6 pr-2 prose-headings:hidden prose-p:my-0 prose-img:hidden dark:text-darkSecondary lg:line-clamp-5 lg:leading-8 xl:max-w-[41rem]'
-              />
+              <ReactMarkdown className='prose line-clamp-6 pr-2 prose-headings:hidden prose-p:my-0 prose-img:hidden dark:text-darkSecondary lg:line-clamp-5 lg:leading-8 xl:max-w-[41rem]'>
+                {previewContent}
+              </ReactMarkdown>
               <div className='flex flex-col justify-center gap-1'>
                 <div className='flex items-start gap-1 text-pink-700'>
                   <RxDrawingPinFilled className='lg:size-5' />
@@ -71,7 +68,11 @@ const Blog = async () => {
           <article className='grid gap-12 md:grid-cols-2 xl:grid-cols-3'>
             {articles?.map((article) => {
               return (
-                <ArticleCard {...article} key={article.id} type='articles' />
+                <ArticleCard
+                  article={article}
+                  key={article.id}
+                  type='articles'
+                />
               );
             })}
           </article>

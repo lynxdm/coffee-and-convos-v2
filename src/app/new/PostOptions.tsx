@@ -29,6 +29,7 @@ const PostOptions = ({
 }) => {
   const [tagSearch, setTagSearch] = useState("");
   const [filterTags, setFilterTags] = useState<Tags[]>([]);
+  const [displayedTags, setDisplayedTags] = useState<Tags[]>([]);
 
   const tagInput = useRef<HTMLInputElement>(null);
   const filteredSearchTags = useRef<HTMLDivElement>(null);
@@ -44,25 +45,53 @@ const PostOptions = ({
   );
 
   useEffect(() => {
-    if (tags.length > 0) setFilterTags(tags);
-  }, [tags]);
+    if (tags.length > 0) {
+      if (articleDraft.selectedTags.length > 0) {
+        const newTags = articleDraft.selectedTags.reduce((acc, item) => {
+          return acc.filter((tag: Tags) => tag.title !== item);
+        }, tags);
+        setDisplayedTags(newTags);
+      } else {
+        setDisplayedTags(tags);
+      }
+    }
+  }, [tags, articleDraft.selectedTags]);
 
   useEffect(() => {
     if (tagSearch) {
-      const filteredTags = tags.filter((tag) =>
+      const filteredTags = displayedTags.filter((tag) =>
         tag.title.startsWith(tagSearch)
       );
       if (filteredTags.length > 0) setFilterTags(filteredTags);
       else setFilterTags([{ title: tagSearch, id: "", articles: [] }]);
     } else {
-      setFilterTags(tags);
+      setFilterTags(displayedTags);
     }
-  }, [tagSearch]);
+  }, [displayedTags, tagSearch]);
 
   const seoTitleRef = useRef(null);
   const seoDescriptionRef = useRef(null);
   useTextarea(seoTitleRef, articleDraft.seoTitle, "70px");
   useTextarea(seoDescriptionRef, articleDraft.seoDescription, "70px");
+
+  const handleClearTag = (tag: string) => {
+    const newTag = tags.find((item) => item.title === tag) ?? {
+      title: tag,
+      articles: [],
+      id: "",
+    };
+
+    const newDisplayedTags = [...displayedTags, newTag];
+    setDisplayedTags(
+      newDisplayedTags.sort((a, b) => a.title.localeCompare(b.title))
+    );
+
+    const newTags = articleDraft.selectedTags.filter((item) => item !== tag);
+    setArticleDraft({
+      ...articleDraft,
+      selectedTags: newTags,
+    });
+  };
 
   return (
     <div className='relative'>
@@ -75,9 +104,12 @@ const PostOptions = ({
       </button>
       <div
         ref={publishMenu}
-        className={`post-options w-[93vw] max-w-[25rem] ${
-          isPublishing ? "flex" : "hidden"
-        } post-options-dark`}
+        className={`post-options scrollbar-thin shadow-lg dark:border-[#3a3a3a] dark:scrollbar-track-[#232425]  dark:scrollbar-thumb-[#535253] w-[93vw] max-w-[25rem]
+          ${
+            articleDraft.selectedTags.length > 3 &&
+            "max-h-[40rem] overflow-y-scroll"
+          }
+           ${isPublishing ? "flex" : "hidden"} post-options-dark`}
       >
         <h3 className='text-xl font-bold font-inter mb-4'>Post options</h3>
         <div>
@@ -92,7 +124,10 @@ const PostOptions = ({
                   className='flex rounded px-1 dark:bg-[#171770b6] gap-2 py-[0.3rem] bg-[#6f727518]'
                 >
                   <p className='text-gray-600 dark:text-[#eaeaea]'>#{tag}</p>
-                  <button className='hover:*:text-[#df1919]'>
+                  <button
+                    className='hover:*:text-[#df1919]'
+                    onClick={() => handleClearTag(tag)}
+                  >
                     <FaXmark className='size-5 dark:text-[#eaeaea]' />
                   </button>
                 </li>
@@ -113,7 +148,7 @@ const PostOptions = ({
             />
             {isTagInputFocused && (
               <div
-                className='max-h-[15rem] absolute bottom-0 translate-y-[103%] w-full bg-white border dark:bg-[#090909] overflow-y-scroll rounded-lg  scrollbar-thin shadow-lg dark:border-[#3a3a3a] dark:scrollbar-track-[#232425] dark:scrollbar-thumb-[#535253] '
+                className='max-h-[15rem] absolute bottom-0 translate-y-[103%] w-full bg-white border dark:bg-[#090909] overflow-y-scroll rounded-lg  scrollbar-thin shadow-lg dark:border-[#3a3a3a] dark:scrollbar-track-[#232425] dark:scrollbar-thumb-[#535253]'
                 ref={filteredSearchTags}
               >
                 {!tagSearch && (
@@ -128,6 +163,11 @@ const PostOptions = ({
                     <button
                       key={tag.title}
                       onClick={() => {
+                        setDisplayedTags(
+                          displayedTags.filter(
+                            (item) => item.title !== tag.title
+                          )
+                        );
                         setArticleDraft({
                           ...articleDraft,
                           selectedTags: [

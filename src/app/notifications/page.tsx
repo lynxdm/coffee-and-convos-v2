@@ -26,7 +26,7 @@ const Notifications = () => {
       }
       markNotificationsAsRead(user, isAdmin);
     }
-  }, [userNotifications]);
+  }, [userNotifications, isAdmin, user]);
 
   if (newNotifications) {
     return (

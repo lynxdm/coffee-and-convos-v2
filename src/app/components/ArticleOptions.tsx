@@ -3,9 +3,14 @@ import { useEffect, useRef, useState } from "react";
 import useMenu from "../hooks/useMenu";
 import { useWarningContext } from "../contexts/WarningModalContext";
 import { useGlobalContext } from "../contexts/AppContext";
-import { Doc, unpinArticles, pinArticle } from "../_firebase/firestore";
+import {
+  Doc,
+  unpinArticles,
+  pinArticle,
+  ArticleDraft,
+} from "../_firebase/firestore";
 import { useRouter } from "next/navigation";
-import { deleteDoc, doc, collection, query, where } from "firebase/firestore";
+import { deleteDoc, doc } from "firebase/firestore";
 import { deleteObject, ref, listAll } from "firebase/storage";
 import { db, storage } from "../_firebase/config";
 
@@ -24,20 +29,33 @@ const ArticleOptions = ({
 
   useEffect(() => {
     if (article.pinned) setIsPinned(true);
-  }, []);
+  }, [article.pinned]);
 
   const manageMenuRef = useRef(null);
   const manageBtnRef = useRef(null);
   const { isMenuOpen, setIsMenuOpen } = useMenu(manageBtnRef, manageMenuRef);
 
   const handleEditing = () => {
-    const { cover, title, date, id } = article;
-    let articleDraft = {
+    const {
+      cover,
+      title,
+      date,
+      id,
+      seoTitle,
+      seoDescription,
+      canonicalUrl,
+      tags,
+    } = article;
+    const articleDraft: ArticleDraft = {
       coverImg: cover.image,
       title: title,
-      content: content,
+      content: content ?? "",
       details: { type: "articles", id: id },
       publishDate: date,
+      selectedTags: tags,
+      seoTitle,
+      seoDescription,
+      canonicalUrl,
     };
 
     localStorage.setItem("articleDraft", JSON.stringify(articleDraft));

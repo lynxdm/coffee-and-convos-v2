@@ -25,6 +25,10 @@ export type Doc = {
   date: string;
   pinned: boolean;
   publishLink: string;
+  tags: Array<string>;
+  seoTitle: string;
+  seoDescription: string;
+  canonicalUrl: string;
 };
 
 export interface ArticleDraft {
@@ -54,7 +58,7 @@ export interface Tags {
 
 export const publishArticle = async (data: {}, id: string, path: string) => {
   try {
-    let articleRef = doc(db, path, id);
+    const articleRef = doc(db, path, id);
     await setDoc(articleRef, data);
   } catch (error) {
     console.log(error);
@@ -121,7 +125,7 @@ export const unpinArticles = async () => {
 
 export const pinArticle = async (id: string) => {
   await unpinArticles();
-  let articleRef = doc(db, "articles", id);
+  const articleRef = doc(db, "articles", id);
   updateDoc(articleRef, {
     pinned: true,
   });
@@ -153,7 +157,7 @@ export const getComments = async (articleId: string): Promise<Comment[]> => {
   const commentsRef = collection(db, "articles", articleId, "comments");
   const snapshot = await getDocs(commentsRef);
 
-  let commentsArr: Comment[] = [];
+  const commentsArr: Comment[] = [];
   snapshot.docs.forEach((doc) => {
     commentsArr.push({
       ...doc.data(),

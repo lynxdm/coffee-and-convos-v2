@@ -1,28 +1,16 @@
 import dynamic from "next/dynamic";
 import { db } from "@/app/_firebase/config";
-import { Doc } from "@/app/_firebase/firestore";
 import Footer from "@/app/components/Footer";
-import {
-  collection,
-  getDocs,
-  Query,
-  query,
-  where,
-  QuerySnapshot,
-  DocumentData,
-} from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { timeAgo } from "@/app/_lib/accessoryFunctions";
 import ReactMarkdown from "react-markdown";
-import useMenu from "@/app/hooks/useMenu";
 import { fetchArticleContent } from "@/app/_firebase/storage";
 import ArticleOptions from "@/app/components/ArticleOptions";
 import CommentSection from "@/app/components/CommentSection";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { title } from "process";
 import { Metadata } from "next";
 import { getArticle } from "@/app/_firebase/firestore";
-import { ArticleData } from "@/app/_firebase/firestore";
 
 // Dynamically import the ScrollToComments component (client-side only)
 const ScrollToComments = dynamic(
@@ -114,10 +102,9 @@ const SingleArticle = async ({ params }: { params: { slug: string } }) => {
             className='rounded-lg w-[60rem] aspect-[16/9] object-cover object-center'
           />
         </div>
-        <ReactMarkdown
-          children={content}
-          className='prose-lg mx-auto max-w-[50rem] break-words font-overpass md:prose-xl prose-headings:mb-4 prose-headings:mt-8 prose-headings:font-kreon prose-headings:font-bold prose-h2:font-extrabold prose-p:my-4 prose-li:list-disc lg:prose-h2:text-4xl'
-        />
+        <ReactMarkdown className='prose-lg mx-auto max-w-[50rem] break-words font-overpass md:prose-xl prose-headings:mb-4 prose-headings:mt-8 prose-headings:font-kreon prose-headings:font-bold prose-h2:font-extrabold prose-p:my-4 prose-li:list-disc lg:prose-h2:text-4xl'>
+          {content}
+        </ReactMarkdown>
         <section
           id='comments'
           className='mx-auto mt-8 max-w-[60rem] border-t px-3 pt-10 dark:border-darkSecondary md:px-8'

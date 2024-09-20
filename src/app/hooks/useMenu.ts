@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, Ref, RefObject } from "react";
+import { useState, useEffect, RefObject } from "react";
 
 function useMenu(
   btn: RefObject<HTMLButtonElement | HTMLInputElement>,
@@ -9,7 +9,6 @@ function useMenu(
 
   const handleMenu = (e: MouseEvent) => {
     const target = e.target as Node;
-    console.log(target);
     if (!btn?.current?.contains(target) && !menu?.current?.contains(target)) {
       setIsMenuOpen(false);
     }
