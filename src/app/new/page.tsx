@@ -93,6 +93,12 @@ const New = () => {
             articles: [formatLink(articleDraft.title)],
           };
           await addDoc(collection(db, "tags"), tagData);
+        } else {
+          const newTagData = {
+            ...checkTag,
+            articles: [...checkTag.articles, formatLink(articleDraft.title)],
+          };
+          await updateDoc(doc(db, `tags/${checkTag.id}`), newTagData);
         }
       }
     } catch (error) {

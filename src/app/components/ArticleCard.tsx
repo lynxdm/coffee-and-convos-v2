@@ -95,6 +95,15 @@ const ArticleCard = ({ type, article }: { type: string; article: Doc }) => {
             {content}
           </ReactMarkdown>
         </li>
+        {type !== "drafts" && (
+          <li className='px-2 mt-1'>
+            <div className='text-md flex gap-2 flex-wrap font-semibold font-kreon text-start'>
+              {article.tags.map((tag) => {
+                return <p key={tag}>#{tag}</p>;
+              })}
+            </div>
+          </li>
+        )}
       </ul>
     );
   }

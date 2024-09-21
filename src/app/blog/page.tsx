@@ -54,6 +54,15 @@ const Blog = async () => {
               <ReactMarkdown className='prose line-clamp-6 pr-2 prose-headings:hidden prose-p:my-0 prose-img:hidden dark:text-darkSecondary lg:line-clamp-5 lg:leading-8 xl:max-w-[41rem]'>
                 {previewContent}
               </ReactMarkdown>
+              <div className='font-kurale gap-2 flex flex-wrap text-lg font-semibold justify-start w-full mx-auto -mt-2'>
+                {pinnedArticle.tags.map((tag) => {
+                  return (
+                    <p key={tag} className='hover:underline'>
+                      #{tag}
+                    </p>
+                  );
+                })}
+              </div>
               <div className='flex flex-col justify-center gap-1'>
                 <div className='flex items-start gap-1 text-pink-700'>
                   <RxDrawingPinFilled className='lg:size-5' />

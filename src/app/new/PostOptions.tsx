@@ -154,7 +154,7 @@ const PostOptions = ({
                 {!tagSearch && (
                   <div>
                     <h4 className='text-lg mx-2 font-inter font-bold px-2 py-4 border-b dark:border-[#3a3a3a]'>
-                      Previous Tags
+                      Existing Tags
                     </h4>
                   </div>
                 )}

@@ -11,6 +11,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { getArticle } from "@/app/_firebase/firestore";
+import { RxDrawingPinFilled } from "react-icons/rx";
 
 // Dynamically import the ScrollToComments component (client-side only)
 const ScrollToComments = dynamic(
@@ -92,7 +93,15 @@ const SingleArticle = async ({ params }: { params: { slug: string } }) => {
             <ArticleOptions article={article} content={content} />
           </div>
         </div>
-        <div className='relative grid place-items-center border-primary py-10 pb-4 lg:py-12 lg:pb-8'>
+        <div className='relative grid place-items-center border-primary my-10 mb-2 lg:my-12 lg:mb-6 w-fit mx-auto'>
+          {article.pinned && (
+            <div
+              className='flex gap-2 text-sm px-1 lg:px-2 rounded-lg -translate-y-[100%] py-[0.1rem] lg:py-1 bg-[#fdadb8] text-[#342f23] dark:bg-[#c26d78] rounded-b-none font-kurale font-semibold items-center w-fit absolute right-2 top-0'
+            >
+              <RxDrawingPinFilled />
+              <p>Pinned</p>
+            </div>
+          )}
           <Image
             width={3255}
             height={2449}
@@ -101,10 +110,28 @@ const SingleArticle = async ({ params }: { params: { slug: string } }) => {
             alt={article.cover.alt}
             className='rounded-lg w-[60rem] aspect-[16/9] object-cover object-center'
           />
+          <div className='font-kurale gap-2 flex max-w-[60rem] text-lg font-semibold justify-start w-full flex-wrap mt-4'>
+            {article.tags.map((tag) => {
+              return (
+                <p key={tag} className='hover:underline'>
+                  #{tag}
+                </p>
+              );
+            })}
+          </div>
         </div>
         <ReactMarkdown className='prose-lg mx-auto max-w-[50rem] break-words font-overpass md:prose-xl prose-headings:mb-4 prose-headings:mt-8 prose-headings:font-kreon prose-headings:font-bold prose-h2:font-extrabold prose-p:my-4 prose-li:list-disc lg:prose-h2:text-4xl'>
           {content}
         </ReactMarkdown>
+        <div className='font-kurale gap-2 flex flex-wrap text-lg font-semibold justify-start w-full max-w-[50rem] mx-auto mt-4'>
+          {article.tags.map((tag) => {
+            return (
+              <p key={tag} className='hover:underline'>
+                #{tag}
+              </p>
+            );
+          })}
+        </div>
         <section
           id='comments'
           className='mx-auto mt-8 max-w-[60rem] border-t px-3 pt-10 dark:border-darkSecondary md:px-8'
