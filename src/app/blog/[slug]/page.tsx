@@ -11,7 +11,8 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { getArticle } from "@/app/_firebase/firestore";
-import { RxDrawingPinFilled } from "react-icons/rx";
+import ShareOptions from "../ShareOptions";
+import Link from "next/link";
 
 // Dynamically import the ScrollToComments component (client-side only)
 const ScrollToComments = dynamic(
@@ -87,21 +88,11 @@ const SingleArticle = async ({ params }: { params: { slug: string } }) => {
         <div className='mx-auto flex max-w-[60rem] items-center justify-between font-kurale dark:text-darkSecondary'>
           <p className='capitalize'>{timeAgo(article.date, false)}</p>
           <div className='flex items-center gap-4'>
-            <button className='underline underline-offset-2'>
-              Share this post
-            </button>
+            <ShareOptions {...article} />
             <ArticleOptions article={article} content={content} />
           </div>
         </div>
         <div className='relative grid place-items-center border-primary my-10 mb-2 lg:my-12 lg:mb-6 w-fit mx-auto'>
-          {article.pinned && (
-            <div
-              className='flex gap-2 text-sm px-1 lg:px-2 rounded-lg -translate-y-[100%] py-[0.1rem] lg:py-1 bg-[#fdadb8] text-[#342f23] dark:bg-[#c26d78] rounded-b-none font-kurale font-semibold items-center w-fit absolute right-2 top-0'
-            >
-              <RxDrawingPinFilled />
-              <p>Pinned</p>
-            </div>
-          )}
           <Image
             width={3255}
             height={2449}
@@ -110,25 +101,20 @@ const SingleArticle = async ({ params }: { params: { slug: string } }) => {
             alt={article.cover.alt}
             className='rounded-lg w-[60rem] aspect-[16/9] object-cover object-center'
           />
-          <div className='font-kurale gap-2 flex max-w-[60rem] text-lg font-semibold justify-start w-full flex-wrap mt-4'>
-            {article.tags.map((tag) => {
-              return (
-                <p key={tag} className='hover:underline'>
-                  #{tag}
-                </p>
-              );
-            })}
-          </div>
         </div>
         <ReactMarkdown className='prose-lg mx-auto max-w-[50rem] break-words font-overpass md:prose-xl prose-headings:mb-4 prose-headings:mt-8 prose-headings:font-kreon prose-headings:font-bold prose-h2:font-extrabold prose-p:my-4 prose-li:list-disc lg:prose-h2:text-4xl'>
           {content}
         </ReactMarkdown>
-        <div className='font-kurale gap-2 flex flex-wrap text-lg font-semibold justify-start w-full max-w-[50rem] mx-auto mt-4'>
+        <div className='font-kreon gap-3 flex flex-wrap text-lg justify-center w-full max-w-[50rem] mx-auto my-8'>
           {article.tags.map((tag) => {
             return (
-              <p key={tag} className='hover:underline'>
+              <Link
+                href={`/blog?tag=${tag}`}
+                key={tag}
+                className='hover:bg-[#e1e1e1] dark:text-darkPrimary dark:bg-[#212121] dark:border-[#323232] dark:hover:bg-[#323232] border transition-[background-color] border-[#e1e1e1] p-2 rounded-xl  bg-[#f1f1f1]'
+              >
                 #{tag}
-              </p>
+              </Link>
             );
           })}
         </div>

@@ -56,7 +56,11 @@ export interface Tags {
   articles: Array<string>;
 }
 
-export const publishArticle = async (data: {}, id: string, path: string) => {
+export const publishArticle = async (
+  data: NonNullable<unknown>,
+  id: string,
+  path: string
+) => {
   try {
     const articleRef = doc(db, path, id);
     await setDoc(articleRef, data);

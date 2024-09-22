@@ -98,8 +98,16 @@ const ArticleCard = ({ type, article }: { type: string; article: Doc }) => {
         {type !== "drafts" && (
           <li className='px-2 mt-1'>
             <div className='text-md flex gap-2 flex-wrap font-semibold font-kreon text-start'>
-              {article.tags.map((tag) => {
-                return <p key={tag}>#{tag}</p>;
+              {article.tags.slice(0, 3).map((tag) => {
+                return (
+                  <Link
+                    href={`/blog?tag=${tag}`}
+                    className='hover:bg-[#e1e1e1] border transition-[background-color] dark:text-darkPrimary dark:bg-[#212121] dark:border-[#323232] dark:hover:bg-[#323232] border-[#e1e1e1] px-2 py-1   rounded-xl  bg-[#f1f1f1]'
+                    key={tag}
+                  >
+                    #{tag}
+                  </Link>
+                );
               })}
             </div>
           </li>
