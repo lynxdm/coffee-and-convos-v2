@@ -1,10 +1,10 @@
-import { Doc } from "../_firebase/firestore";
+import { Doc } from "../../_firebase/firestore";
 import { FiArrowUpRight } from "react-icons/fi";
 import { RxDrawingPinFilled } from "react-icons/rx";
 import ReactMarkdown from "react-markdown";
 import Link from "next/link";
 import Image from "next/image";
-import { formatLink, timeAgo } from "../_lib/accessoryFunctions";
+import { formatLink, timeAgo } from "../../_lib/accessoryFunctions";
 
 const PinnedArticle = ({
   pinnedArticle,
@@ -15,7 +15,7 @@ const PinnedArticle = ({
 }) => {
   return (
     <section className='mt-8 flex flex-col items-center justify-between gap-4 border-b-2 border-primary pb-4 dark:border-[#3a3a3a] lg:flex-row lg:gap-8 lg:border-2 lg:pb-0'>
-      <div className='relative aspect-[2/1.5] w-full max-w-[40rem]  md:aspect-[2/1.2] lg:aspect-[1/1.1] lg:w-[50%] lg:max-w-full min-[1200px]:aspect-[2/1.8] xl:aspect-[2/1.5]'>
+      <div className='relative h-full flex-grow aspect-[2/1.5] w-full max-w-[40rem]  md:aspect-[2/1.2] lg:aspect-[1/1.1] lg:w-[50%] lg:max-w-full min-[1200px]:aspect-[2/1.8] xl:aspect-[2/1.5]'>
         <Image
           src={pinnedArticle.cover.image}
           alt={pinnedArticle.title + "cover image"}

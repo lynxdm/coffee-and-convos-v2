@@ -11,7 +11,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { getArticle } from "@/app/_firebase/firestore";
-import ShareOptions from "../ShareOptions";
+import ShareOptions from "../components/ShareOptions";
 import Link from "next/link";
 
 // Dynamically import the ScrollToComments component (client-side only)
@@ -46,17 +46,31 @@ export async function generateMetadata({
       };
     }
 
+    const content = await fetchArticleContent(article.id, "articles");
+
     return {
-      title: article.title,
-      description: "Article by Adesegun Adefunke",
+      title: article.seoTitle || article.title,
+      description:
+        article.seoDescription ||
+        `${content?.slice(0, 100)}... ${
+          article.tags.length > 0
+            ? `Tagged with ${article.tags.join(", ")}`
+            : ""
+        }`,
       creator: "Adesegun Adefunke",
       alternates: {
-        canonical: `/blog/${article.publishLink}`,
+        canonical: article.canonicalUrl || `/blog/${article.publishLink}`,
       },
       twitter: {
         card: "summary_large_image",
-        title: article.title,
-        description: "Article by Adesegun Adefunke",
+        title: article.seoTitle || article.title,
+        description:
+          article.seoDescription ||
+          `${content?.slice(0, 100)}... ${
+            article.tags.length > 0
+              ? `Tagged with ${article.tags.join(", ")}`
+              : ""
+          }`,
         creator: "@iyamfunky",
       },
     };

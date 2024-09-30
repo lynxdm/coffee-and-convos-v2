@@ -14,13 +14,13 @@ import { useWarningContext } from "../contexts/WarningModalContext";
 import { publishArticle } from "../_firebase/firestore";
 import { v4 } from "uuid";
 import { useRouter } from "next/navigation";
-import EditorNav from "./EditorNav";
+import EditorNav from "./components/EditorNav";
 import { formatLink } from "../_lib/accessoryFunctions";
-import Editor from "./Editor";
-import Preview from "./Preview";
+import Editor from "./components/Editor";
+import Preview from "./components/Preview";
 import { ArticleDraft } from "../_firebase/firestore";
 import { getTags, Tags } from "../_firebase/firestore";
-import PostOptions from "./PostOptions";
+import PostOptions from "./components/PostOptions";
 
 const initialDraft = {
   coverImg: "",
@@ -60,7 +60,7 @@ const New = () => {
 
   useEffect(() => {
     getTags().then((result) => {
-      setTags(result);
+      setTags(result.sort((a, b) => b.articles.length - a.articles.length));
     });
   }, []);
 

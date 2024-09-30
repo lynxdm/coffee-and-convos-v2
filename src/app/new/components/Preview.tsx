@@ -1,5 +1,5 @@
 "use client";
-import { ArticleDraft } from "../_firebase/firestore";
+import { ArticleDraft } from "../../_firebase/firestore";
 import ReactMarkdown from "react-markdown";
 
 const Preview = ({ articleDraft }: { articleDraft: ArticleDraft }) => {

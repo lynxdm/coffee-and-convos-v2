@@ -11,20 +11,33 @@ export const size = {
 export const contentType = "image/png";
 
 export default async function og({ params }: { params: { slug: string } }) {
-  const slug = params.slug;
   const article = await getArticle(
     query(collection(db, "articles"), where("publishLink", "==", params.slug))
   );
 
   return new ImageResponse(
     (
-      <div tw='flex relative w-full h-full justify-center'>
+      <div
+        style={{
+          display: "flex",
+          position: "relative",
+          width: "100%",
+          height: "100%",
+          justifyContent: "center",
+        }}
+      >
         <img
           src={article?.cover.image + "&w=1200&h=630&auto=format&q=75"}
-          alt={article?.cover.alt}
-          tw='object-cover flex'
+          alt={article?.cover.alt || ""}
+          width={1200}
+          height={630}
+          style={{ objectFit: "cover", display: "flex" }}
         />
       </div>
-    )
+    ),
+    {
+      width: size.width,
+      height: size.height,
+    }
   );
 }

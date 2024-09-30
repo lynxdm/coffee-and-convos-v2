@@ -2,8 +2,8 @@
 import { FaXmark } from "react-icons/fa6";
 import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";
-import { useWarningContext } from "../contexts/WarningModalContext";
-import { ArticleDraft } from "../_firebase/firestore";
+import { useWarningContext } from "../../contexts/WarningModalContext";
+import { ArticleDraft } from "../../_firebase/firestore";
 import { useRouter } from "next/navigation";
 
 const EditorNav = ({

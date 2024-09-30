@@ -1,6 +1,6 @@
 "use client";
 import { useRef } from "react";
-import useMenu from "../hooks/useMenu";
+import useMenu from "../../hooks/useMenu";
 import {
   FaWhatsapp,
   FaLinkedinIn,

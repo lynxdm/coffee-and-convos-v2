@@ -13,11 +13,6 @@ export const metadata: Metadata = {
   },
   description: "A personal blog by the betawriter",
   creator: "Adesegun Adefunke",
-  openGraph: {
-    url: "https://coffee-and-convos.vercel.app",
-    siteName: "Coffee & Convos",
-    type: "website",
-  },
 };
 
 export default function RootLayout({

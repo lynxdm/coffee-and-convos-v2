@@ -1,11 +1,10 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
-import UseToolbar from "../hooks/useToolbar";
-import useTextarea from "../hooks/useTextarea";
-import { v4 } from "uuid";
+import UseToolbar from "../../hooks/useToolbar";
+import useTextarea from "../../hooks/useTextarea";
 import { uploadCoverImage, deleteCoverImage } from "@/app/_firebase/storage";
 import { ScaleLoader } from "react-spinners";
-import { ArticleDraft } from "../_firebase/firestore";
+import { ArticleDraft } from "../../_firebase/firestore";
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 const Editor = ({

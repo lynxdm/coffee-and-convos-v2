@@ -7,10 +7,10 @@ import {
   SetStateAction,
   Dispatch,
 } from "react";
-import { ArticleDraft, Tags } from "../_firebase/firestore";
-import useMenu from "../hooks/useMenu";
+import { ArticleDraft, Tags } from "../../_firebase/firestore";
+import useMenu from "../../hooks/useMenu";
 import { FaXmark } from "react-icons/fa6";
-import useTextarea from "../hooks/useTextarea";
+import useTextarea from "../../hooks/useTextarea";
 
 const PostOptions = ({
   tags,
@@ -82,9 +82,7 @@ const PostOptions = ({
     };
 
     const newDisplayedTags = [...displayedTags, newTag];
-    setDisplayedTags(
-      newDisplayedTags.sort((a, b) => a.title.localeCompare(b.title))
-    );
+    setDisplayedTags(newDisplayedTags);
 
     const newTags = articleDraft.selectedTags.filter((item) => item !== tag);
     setArticleDraft({
