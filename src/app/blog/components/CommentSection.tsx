@@ -1,7 +1,12 @@
 "use client";
 import { useEffect, useState, useRef, FormEvent, ChangeEvent } from "react";
-import { addComment, Doc, getComments, Comment } from "../_firebase/firestore";
-import useTextarea from "../hooks/useTextarea";
+import {
+  addComment,
+  Doc,
+  getComments,
+  Comment,
+} from "../../_firebase/firestore";
+import useTextarea from "../../hooks/useTextarea";
 import { genConfig } from "react-nice-avatar";
 import ReactNiceAvatar from "react-nice-avatar";
 import CommentItem from "./CommentItem";
@@ -9,8 +14,8 @@ import { FaUserCircle } from "react-icons/fa";
 import { v4 } from "uuid";
 import { ScaleLoader } from "react-spinners";
 import Link from "next/link";
-import { useGlobalContext } from "../contexts/AppContext";
-import { sendAdminNotification } from "../_firebase/notifications";
+import { useGlobalContext } from "../../contexts/AppContext";
+import { sendAdminNotification } from "../../_firebase/notifications";
 
 const CommentSection = ({ article }: { article: Doc }) => {
   const { user, admin } = useGlobalContext();
@@ -60,7 +65,7 @@ const CommentSection = ({ article }: { article: Doc }) => {
           admin
         );
       })
-      .catch((error: any) => {
+      .catch((error: ErrorCallback) => {
         console.error("Error adding comment:", error);
         setIsLoading(false);
       });

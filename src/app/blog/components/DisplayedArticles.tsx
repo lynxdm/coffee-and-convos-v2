@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 
 const DisplayedArticles = ({ articles }: { articles: ArticleData[] }) => {
+  console.log(articles);
   const searchParams = useSearchParams();
 
   const displayedArticles = useMemo(() => {

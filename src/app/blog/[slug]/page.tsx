@@ -5,9 +5,10 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { timeAgo } from "@/app/_lib/accessoryFunctions";
 import ReactMarkdown from "react-markdown";
 import { fetchArticleContent } from "@/app/_firebase/storage";
-import ArticleOptions from "@/app/components/ArticleOptions";
-import CommentSection from "@/app/components/CommentSection";
+import ArticleOptions from "@/app/blog/components/ArticleOptions";
+import CommentSection from "@/app/blog/components/CommentSection";
 import Image from "next/image";
+import placeholderImg from "@/app/assets/images/placeholder.jpg";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { getArticle } from "@/app/_firebase/firestore";
@@ -16,7 +17,7 @@ import Link from "next/link";
 
 // Dynamically import the ScrollToComments component (client-side only)
 const ScrollToComments = dynamic(
-  () => import("@/app/components/ScrollToComments"),
+  () => import("@/app/blog/components/ScrollToComments"),
   {
     ssr: false, // Ensure it's only run on the client side
   }
@@ -111,7 +112,7 @@ const SingleArticle = async ({ params }: { params: { slug: string } }) => {
             width={3255}
             height={2449}
             priority
-            src={article.cover.image}
+            src={article.cover.image || placeholderImg}
             alt={article.cover.alt}
             className='rounded-lg w-[60rem] aspect-[16/9] object-cover object-center'
           />

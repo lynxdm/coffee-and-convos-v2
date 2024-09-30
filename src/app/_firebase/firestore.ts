@@ -114,6 +114,29 @@ export const getTags = async (): Promise<Tags[]> => {
   }
 };
 
+export const checkOrRemoveTags = async (articleLink: string) => {
+  const tags: Tags[] = await getTags();
+
+  // Use promises to store the deletion and update operations
+  const promises = tags.map(async (tag) => {
+    if (tag.articles.includes(articleLink)) {
+      const updatedArticles = tag.articles.filter(
+        (item) => item !== articleLink
+      );
+
+      if (updatedArticles.length === 0) {
+        const tagDocRef = doc(db, "tags", tag.id);
+        await deleteDoc(tagDocRef);
+      } else {
+        const tagDocRef = doc(db, "tags", tag.id);
+        await updateDoc(tagDocRef, { articles: updatedArticles });
+      }
+    }
+  });
+
+  await Promise.all(promises);
+};
+
 export const unpinArticles = async () => {
   const articlesRef = collection(db, "articles");
   const q = query(articlesRef, where("pinned", "==", true));

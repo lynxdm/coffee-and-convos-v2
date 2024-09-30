@@ -1,18 +1,19 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import useMenu from "../hooks/useMenu";
-import { useWarningContext } from "../contexts/WarningModalContext";
-import { useGlobalContext } from "../contexts/AppContext";
+import useMenu from "../../hooks/useMenu";
+import { useWarningContext } from "../../contexts/WarningModalContext";
+import { useGlobalContext } from "../../contexts/AppContext";
 import {
   Doc,
   unpinArticles,
   pinArticle,
   ArticleDraft,
-} from "../_firebase/firestore";
+  checkOrRemoveTags,
+} from "../../_firebase/firestore";
 import { useRouter } from "next/navigation";
 import { deleteDoc, doc } from "firebase/firestore";
 import { deleteObject, ref, listAll } from "firebase/storage";
-import { db, storage } from "../_firebase/config";
+import { db, storage } from "../../_firebase/config";
 
 const ArticleOptions = ({
   article,
@@ -72,6 +73,7 @@ const ArticleOptions = ({
 
       const deletePromises = items.map((fileRef) => deleteObject(fileRef));
       await Promise.all(deletePromises);
+      await checkOrRemoveTags(article.publishLink);
 
       // Navigate to the blog page
       router.push("/blog");

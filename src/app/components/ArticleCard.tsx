@@ -8,6 +8,7 @@ import Link from "next/link";
 import { fetchArticleContent } from "../_firebase/storage";
 import { timeAgo, formatLink } from "../_lib/accessoryFunctions";
 import { ArticleDraft, Doc } from "../_firebase/firestore";
+import placeholderImg from "@/app/assets/images/placeholder.jpg";
 
 const ArticleCard = ({ type, article }: { type: string; article: Doc }) => {
   const {
@@ -86,13 +87,13 @@ const ArticleCard = ({ type, article }: { type: string; article: Doc }) => {
           <Image
             fill
             className='aspect-[16/7] object-cover object-center md:aspect-[3/1.5]'
-            src={cover.image}
+            src={cover.image || placeholderImg}
             alt={cover.alt}
           />
         </li>
         <li className='mt-6 px-2'>
           <ReactMarkdown className='prose line-clamp-3 leading-loose prose-headings:hidden prose-p:my-0 prose-img:hidden dark:text-darkSecondary'>
-            {content}
+            {content || "  "}
           </ReactMarkdown>
         </li>
         {type !== "drafts" && (

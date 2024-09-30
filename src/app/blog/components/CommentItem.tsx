@@ -14,7 +14,7 @@ import {
 } from "react-icons/fa";
 import { HiOutlineDotsHorizontal, HiBadgeCheck } from "react-icons/hi";
 import { v4 as uuidv4 } from "uuid";
-import useMenu from "../hooks/useMenu";
+import useMenu from "../../hooks/useMenu";
 import {
   addLike,
   deleteComment,
@@ -22,18 +22,17 @@ import {
   removeLike,
   editComment,
   Comment,
-} from "../_firebase/firestore";
+} from "../../_firebase/firestore";
 import ReactNiceAvatar, { genConfig } from "react-nice-avatar";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-// import { getComments } from "../_firebase/firestore";
-import { timeAgo } from "../_lib/accessoryFunctions";
-import { useGlobalContext } from "../contexts/AppContext";
-import { useWarningContext } from "../contexts/WarningModalContext";
+import { timeAgo } from "../../_lib/accessoryFunctions";
+import { useGlobalContext } from "../../contexts/AppContext";
+import { useWarningContext } from "../../contexts/WarningModalContext";
 import CommentText from "./CommentText";
 
 const CommentItem = ({
-  user: { displayName, photoURL, email, userId },
+  user: { displayName, photoURL, email },
   comment,
   parentId,
   article,
@@ -50,7 +49,7 @@ const CommentItem = ({
   article: { id: string; publishLink: string; title: string };
   updateComments: () => void;
 }) => {
-  const { id: articleId, publishLink, title } = article;
+  const { id: articleId, publishLink } = article;
   const router = useRouter();
   const { user, admin, isAdmin } = useGlobalContext();
   const { setIsModalWarningOpen, setWarningContent } = useWarningContext();
@@ -101,7 +100,7 @@ const CommentItem = ({
       .then(() => {
         updateComments();
       })
-      .catch((error) => {
+      .catch(() => {
         setIsLiked(false);
         throw new Error("error adding like");
       });
@@ -114,7 +113,7 @@ const CommentItem = ({
       .then(() => {
         updateComments();
       })
-      .catch((error) => {
+      .catch(() => {
         throw new Error("error removing like");
       });
   };
@@ -140,7 +139,7 @@ const CommentItem = ({
           setIsReplyFolded(false);
           updateComments();
         })
-        .catch((error) => {
+        .catch(() => {
           throw new Error("error adding reply");
         });
     }
@@ -157,7 +156,7 @@ const CommentItem = ({
           setEditText("");
           updateComments();
         })
-        .catch((error) => {
+        .catch(() => {
           throw new Error("error editing comment");
         });
     }
@@ -169,7 +168,7 @@ const CommentItem = ({
         updateComments();
         setIsModalWarningOpen(false);
       })
-      .catch((error) => {
+      .catch(() => {
         throw new Error("error deleting comment");
       });
   };

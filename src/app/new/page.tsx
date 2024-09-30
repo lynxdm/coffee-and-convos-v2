@@ -113,6 +113,11 @@ const New = () => {
       return;
     }
 
+    if (!articleDraft.content) {
+      setErrorComponent({ show: true, content: "The content cannot be blank" });
+      return;
+    }
+
     //  start loading
     setIsLoading({
       show: true,
