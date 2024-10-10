@@ -22,6 +22,7 @@ import { genConfig } from "react-nice-avatar";
 import ReactNiceAvatar from "react-nice-avatar";
 import { toast } from "sonner";
 import { signUserOut } from "../_firebase/auth";
+import Image from "next/image";
 
 const Navbar = ({ bg }: { bg: string }) => {
   const router = useRouter();
@@ -117,8 +118,10 @@ const Navbar = ({ bg }: { bg: string }) => {
               >
                 {user.photoURL ? (
                   !imageError ? (
-                    <img
+                    <Image
                       src={user.photoURL}
+                      height={100}
+                      width={100}
                       alt={user.displayName + " display photo"}
                       className='size-6 rounded-full object-cover lg:size-8'
                       onError={() => setImageError(true)}

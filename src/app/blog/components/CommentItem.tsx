@@ -30,6 +30,7 @@ import { timeAgo } from "../../_lib/accessoryFunctions";
 import { useGlobalContext } from "../../contexts/AppContext";
 import { useWarningContext } from "../../contexts/WarningModalContext";
 import CommentText from "./CommentText";
+import Image from "next/image";
 
 const CommentItem = ({
   user: { displayName, photoURL, email },
@@ -51,7 +52,11 @@ const CommentItem = ({
 }) => {
   const { id: articleId, publishLink } = article;
   const router = useRouter();
-  const { user, currentAdmin: {isAdmin}, admins } = useGlobalContext();
+  const {
+    user,
+    currentAdmin: { isAdmin },
+    admins,
+  } = useGlobalContext();
   const { setIsModalWarningOpen, setWarningContent } = useWarningContext();
 
   const [newReply, setNewReply] = useState("");
@@ -83,7 +88,7 @@ const CommentItem = ({
       }
     });
     setLikesCount(comment.likes.length);
-  }, []);
+  }, [comment.likes, user.email]);
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setNewReply(e.target.value);
@@ -178,7 +183,9 @@ const CommentItem = ({
       <div className='flex items-start gap-3'>
         {photoURL ? (
           !imageError ? (
-            <img
+            <Image
+              height={100}
+              width={100}
               src={photoURL}
               alt={displayName + " display photo"}
               className='size-8 rounded-full'
@@ -192,7 +199,7 @@ const CommentItem = ({
         )}
         <div className='w-full rounded-md border border-gray-300 p-2 dark:border-[#3a3a3a]'>
           <div className='flex w-full justify-between'>
-            <div className='mb-2 flex items-center gap-2 font-kurale text-[0.9rem] text-gray-600 dark:text-darkSecondary'>
+            <div className='mb-2 flex items-center gap-2 font-kurale text-primary dark:text-darkSecondary'>
               <p className='font-bold'>
                 {displayName}{" "}
                 {email === admins[0].email && (
@@ -200,7 +207,7 @@ const CommentItem = ({
                 )}
               </p>
               <span>•</span>
-              <p className='text-sm'>{timeAgo(comment.timestamp, true)}</p>
+              <p>{timeAgo(comment.timestamp, true)}</p>
               {comment.edited && (
                 <>
                   <span>•</span>
@@ -259,9 +266,9 @@ const CommentItem = ({
       </div>
       {!isReplyOpen && !isEditing && (
         <div className='flex items-center justify-between'>
-          <div className='ml-12 mt-3 flex gap-2 *:flex *:items-start *:gap-2 *:rounded *:px-3 *:py-1.5'>
+          <div className='ml-12 mt-3 flex gap-2 *:flex *:gap-2 *:items-center *:rounded *:px-3 *:py-1.5'>
             <button
-              className={`${
+              className={` grid place-items-center ${
                 isLiked
                   ? "bg-[#d71c1c18]"
                   : "hover:bg-gray-100 dark:hover:bg-[#262626]"
@@ -287,7 +294,7 @@ const CommentItem = ({
               }}
             >
               {isLiked ? <FaHeart className='text-red-600' /> : <FaRegHeart />}{" "}
-              <p className='text-sm'>
+              <p className='text-sm self-center'>
                 <span>{likesCount > 0 ? likesCount : ""} </span>
                 <span className='hidden lg:inline-block'>
                   {likesCount > 1 ? "likes" : "like"}
