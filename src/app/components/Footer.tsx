@@ -51,23 +51,29 @@ const Footer = () => {
             </Link>
           </li>
         </ul>
-        <ul className='flex gap-8 *:cursor-pointer *:rounded-full *:border-2 *:border-[#342f23] *:bg-[#342f23] dark:*:border-[#18140d] *:p-2 *:text-[#fdadb8] dark:*:bg-[#18140d] dark:*:text-[#c26d78]'>
-          <li>
+        <div className='flex gap-8 *:cursor-pointer *:rounded-full *:border-2 *:border-[#342f23] *:bg-[#342f23] dark:*:border-[#18140d] *:p-2 *:text-[#fdadb8] dark:*:bg-[#18140d] dark:*:text-[#c26d78]'>
+          <a
+            href='https://www.linkedin.com/in/adefunke-adesegun-526275244?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app'
+            target='_blank'
+          >
             <FaLinkedinIn />
-          </li>
-          <li>
+          </a>
+          <a href='https://x.com/fforfunke/' target='_blank'>
             <FaXTwitter />
-          </li>
-          <li>
+          </a>
+          <a
+            href='https://www.instagram.com/thebetawriter?igsh=MWRrdm14NzFpbmpqdQ%3D%3D&utm_source=qr'
+            target='_blank'
+          >
             <FaInstagram />
-          </li>
-          <li>
+          </a>
+          <a href='http://medium.com/@fforFunke' target='_blank'>
             <FaMedium />
-          </li>
-          <li>
+          </a>
+          <a href='mailto:Adesegunfunke16@gmail.com'>
             <BiLogoGmail />
-          </li>
-        </ul>
+          </a>
+        </div>
       </div>
       <div className='w-full border-t-2 font-kreon border-[#342f23] pt-8'>
         <p className='text-center'>

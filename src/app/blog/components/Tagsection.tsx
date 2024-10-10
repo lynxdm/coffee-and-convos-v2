@@ -9,6 +9,7 @@ const Tagsection = () => {
   const searchParams = useSearchParams();
   const [tags, setTags] = useState<Tags[]>([]);
   const [displayedTags, setDisplayedTags] = useState<Tags[]>(tags);
+  const [selectedTag, setSelectedTag] = useState("all");
 
   useEffect(() => {
     getTags()
@@ -19,6 +20,8 @@ const Tagsection = () => {
         console.error("Error getting tags in blog page:", error)
       );
   }, [searchParams]);
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
     setDisplayedTags(tags);
@@ -39,6 +42,8 @@ const Tagsection = () => {
     if (searchParams.has("tag")) {
       const currentTag = searchParams.get("tag");
       if (currentTag) {
+        setSelectedTag(currentTag);
+
         const newResult: Tags[] = [
           { articles: [], title: currentTag, id: currentTag },
           ...tags.filter((tag) => tag.title !== currentTag),
@@ -59,9 +64,12 @@ const Tagsection = () => {
         >
           <div className='w-max flex gap-2 text-base'>
             <button
-              onClick={() => router.push("/blog", { scroll: false })}
+              onClick={() => {
+                setSelectedTag("all");
+                router.push("/blog", { scroll: false });
+              }}
               className={`border transition-[background-color] px-4 py-2 rounded-2xl grid place-items-center font-semibold font-kreon ${
-                !searchParams.has("tag")
+                selectedTag === "all"
                   ? "bg-[#212121] border-[#323232] text-[#e1e4e6] hover:bg-[#212121] hover:text-[#e1e4e6] dark:bg-[#e1e4e6] dark:text-primary dark:hover:bg-[#e1e4e6] dark:hover:text-primary"
                   : "dark:text-darkPrimary dark:bg-[#212121] dark:border-[#323232] dark:hover:bg-[#323232] border-[#e1e1e1] bg-[#f1f1f1] hover:bg-[#e1e1e1]"
               }`}
@@ -71,12 +79,13 @@ const Tagsection = () => {
             {displayedTags.map((tag) => {
               return (
                 <button
-                  onClick={() =>
-                    router.push(`/blog?tag=${tag.title}`, { scroll: false })
-                  }
+                  onClick={() => {
+                    setSelectedTag(tag.title);
+                    router.push(`/blog?tag=${tag.title}`, { scroll: false });
+                  }}
                   key={tag.id}
                   className={`border transition-[background-color] px-4 py-2 rounded-2xl grid place-items-center font-semibold font-kreon ${
-                    searchParams.has("tag", tag.title)
+                    selectedTag === tag.title
                       ? "bg-[#212121] border-[#323232] text-[#e1e4e6] hover:bg-[#212121] hover:text-[#e1e4e6] dark:bg-[#e1e4e6] dark:text-primary dark:hover:bg-[#e1e4e6] dark:hover:text-primary"
                       : "dark:text-darkPrimary dark:bg-[#212121] dark:border-[#323232] dark:hover:bg-[#323232] border-[#e1e1e1] bg-[#f1f1f1] hover:bg-[#e1e1e1]"
                   }`}

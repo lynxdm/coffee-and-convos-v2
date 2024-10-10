@@ -57,23 +57,29 @@ export default async function Home() {
               <p className='text-right text-base font-semibold lg:ml-0 lg:text-left xl:text-xl'>
                 A creative, content & technical writer{" "}
               </p>
-              <ul className='mt-5 hidden gap-5 lg:flex'>
-                <li>
+              <div className='mt-5 hidden gap-5 lg:flex'>
+                <a
+                  href='https://www.linkedin.com/in/adefunke-adesegun-526275244?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app'
+                  target='_blank'
+                >
                   <FaLinkedinIn />
-                </li>
-                <li>
+                </a>
+                <a href='https://x.com/fforfunke/' target='_blank'>
                   <FaXTwitter />
-                </li>
-                <li>
+                </a>
+                <a
+                  href='https://www.instagram.com/thebetawriter?igsh=MWRrdm14NzFpbmpqdQ%3D%3D&utm_source=qr'
+                  target='_blank'
+                >
                   <FaInstagram />
-                </li>
-                <li>
+                </a>
+                <a href='http://medium.com/@fforFunke' target='_blank'>
                   <FaMedium />
-                </li>
-                <li>
+                </a>
+                <a href='mailto:Adesegunfunke16@gmail.com'>
                   <BiLogoGmail />
-                </li>
-              </ul>
+                </a>
+              </div>
             </div>
           </article>
         </section>

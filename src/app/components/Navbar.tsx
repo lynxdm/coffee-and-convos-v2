@@ -20,15 +20,21 @@ import { useGlobalContext } from "../contexts/AppContext";
 import useMenu from "../hooks/useMenu";
 import { genConfig } from "react-nice-avatar";
 import ReactNiceAvatar from "react-nice-avatar";
-import { toast } from "sonner";
 import { signUserOut } from "../_firebase/auth";
 import Image from "next/image";
+import { useWarningContext } from "../contexts/WarningModalContext";
 
 const Navbar = ({ bg }: { bg: string }) => {
   const router = useRouter();
-  const { currentAdmin: {isAdmin}, user, theme, setTheme, userNotifications } =
-    useGlobalContext();
+  const {
+    currentAdmin: { isAdmin },
+    user,
+    theme,
+    setTheme,
+    userNotifications,
+  } = useGlobalContext();
   const [imageError, setImageError] = useState(false);
+  const { setWarningContent, setIsModalWarningOpen } = useWarningContext();
 
   const notificationNum = userNotifications.filter(
     (notification: { read: boolean }) => !notification.read && notification
@@ -197,17 +203,17 @@ const Navbar = ({ bg }: { bg: string }) => {
                     <button
                       type='button'
                       onClick={() => {
-                        toast.warning("Are you sure you want to log out?", {
-                          action: {
-                            label: "Logout",
-                            onClick: () => {
-                              signUserOut();
-                              router.push("/login");
-                              toast.dismiss();
-                            },
+                        setWarningContent({
+                          proceedText: "Logout",
+                          content: "Are you sure you want to log out?",
+                          header: "You're about to log out",
+                          proceed: () => {
+                            signUserOut();
+                            router.push("/login");
                           },
-                          duration: 6000,
+                          cancelText: "cancel",
                         });
+                        setIsModalWarningOpen(true);
                       }}
                     >
                       <TbLogout2 className='size-5' />
@@ -275,23 +281,29 @@ const Navbar = ({ bg }: { bg: string }) => {
               Blog
             </Link>
           </div>
-          <ul className='flex flex-wrap gap-4 px-6 *:*:size-5 *:rounded-full *:p-2 hover:*:bg-gray-200 dark:hover:*:bg-[#262626]'>
-            <li>
+          <div className='flex flex-wrap gap-4 px-6 *:*:size-5 *:rounded-full *:p-2 hover:*:bg-gray-200 dark:hover:*:bg-[#262626]'>
+            <a
+              href='https://www.linkedin.com/in/adefunke-adesegun-526275244?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app'
+              target='_blank'
+            >
               <FaLinkedinIn />
-            </li>
-            <li>
+            </a>
+            <a href='https://x.com/fforfunke/' target='_blank'>
               <FaXTwitter />
-            </li>
-            <li>
+            </a>
+            <a
+              href='https://www.instagram.com/thebetawriter?igsh=MWRrdm14NzFpbmpqdQ%3D%3D&utm_source=qr'
+              target='_blank'
+            >
               <FaInstagram />
-            </li>
-            <li>
+            </a>
+            <a href='http://medium.com/@fforFunke' target='_blank'>
               <FaMedium />
-            </li>
-            <li>
+            </a>
+            <a href='mailto:Adesegunfunke16@gmail.com'>
               <BiLogoGmail />
-            </li>
-          </ul>
+            </a>
+          </div>
         </div>
       </aside>
     </>
