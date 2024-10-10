@@ -5,6 +5,7 @@ import { db } from "../_firebase/config";
 import { fetchArticleContent } from "../_firebase/storage";
 import PinnedArticle from "./components/PinnedArticle";
 import DisplayedArticles from "./components/DisplayedArticles";
+import BackUpButton from "./components/BackUpButton";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,7 @@ const Blog = async () => {
         <DisplayedArticles articles={articles} />
       </main>
       <Footer />
+      <BackUpButton />
     </>
   );
 };

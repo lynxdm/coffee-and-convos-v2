@@ -25,7 +25,7 @@ import { signUserOut } from "../_firebase/auth";
 
 const Navbar = ({ bg }: { bg: string }) => {
   const router = useRouter();
-  const { isAdmin, user, theme, setTheme, userNotifications } =
+  const { currentAdmin: {isAdmin}, user, theme, setTheme, userNotifications } =
     useGlobalContext();
   const [imageError, setImageError] = useState(false);
 

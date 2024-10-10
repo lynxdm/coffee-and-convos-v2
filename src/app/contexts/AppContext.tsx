@@ -1,13 +1,17 @@
 "use client";
 import React, { useContext, useState, useEffect } from "react";
-import { auth, admin } from "@/app/_firebase/config";
+import { auth, admins } from "@/app/_firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { updateNotifications } from "../_firebase/notifications";
 import { Notification } from "../_firebase/notifications";
+import { SkeletonTheme } from "react-loading-skeleton";
 
 interface AppContextType {
-  admin: { displayName: string; email: string };
-  isAdmin: boolean;
+  currentAdmin: {
+    isAdmin: boolean;
+    admin: { displayName: string; email: string; userId: string };
+  };
+  admins: Array<{ displayName: string; email: string; userId: string }>;
   user: {
     email: string;
     photoURL: string;
@@ -30,7 +34,14 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   });
 
   const [theme, setTheme] = useState("light");
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [currentAdmin, setCurrentAdmin] = useState({
+    isAdmin: false,
+    admin: {
+      displayName: "",
+      email: "",
+      userId: "",
+    },
+  });
   const [userNotifications, setUserNotifications] = useState<Notification[]>(
     []
   );
@@ -79,11 +90,9 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Check if the current user is an admin
   const checkUser = () => {
-    if (user.email === admin.email) {
-      setIsAdmin(true);
-    } else {
-      setIsAdmin(false);
-    }
+    admins.forEach((admin) => {
+      if (user.email === admin.email) setCurrentAdmin({ isAdmin: true, admin });
+    });
   };
 
   // Handle Firebase authentication state change
@@ -105,7 +114,14 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
           photoURL: "",
           userId: "",
         });
-        setIsAdmin(false);
+        setCurrentAdmin({
+          isAdmin: false,
+          admin: {
+            displayName: "",
+            email: "",
+            userId: "",
+          },
+        });
         console.log("No user logged in");
       }
     });
@@ -128,9 +144,14 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AppContext.Provider
-      value={{ admin, isAdmin, user, theme, setTheme, userNotifications }}
+      value={{ currentAdmin, admins, user, theme, setTheme, userNotifications }}
     >
-      {children}
+      <SkeletonTheme
+        baseColor={theme === "light" ? "#e1e1e1" : "#202020"}
+        highlightColor={theme === "light" ? "#fff" : "#444"}
+      >
+        {children}
+      </SkeletonTheme>
     </AppContext.Provider>
   );
 };

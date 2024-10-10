@@ -18,7 +18,7 @@ import { useGlobalContext } from "../../contexts/AppContext";
 import { sendAdminNotification } from "../../_firebase/notifications";
 
 const CommentSection = ({ article }: { article: Doc }) => {
-  const { user, admin } = useGlobalContext();
+  const { user, admins } = useGlobalContext();
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -62,7 +62,7 @@ const CommentSection = ({ article }: { article: Doc }) => {
           user,
           article.publishLink,
           article.title,
-          admin
+          admins[0]
         );
       })
       .catch((error: ErrorCallback) => {

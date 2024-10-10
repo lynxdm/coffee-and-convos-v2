@@ -15,17 +15,24 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-let firebase_app =
+const firebase_app =
   getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
 export const db = getFirestore(firebase_app);
 export const auth = getAuth(firebase_app);
 export const storage = getStorage(firebase_app);
 export const provider = new GoogleAuthProvider();
-export const admin = {
-  displayName: "Ajayi Ayobami",
-  email: "lynxdm32@gmail.com",
-  userId: "RpnOnCzRMZb790xizN1yl4U2JCK2",
-};
+export const admins = [
+  {
+    displayName: "Adesegun Adefunke",
+    email: "adefunke16@gmail.com",
+    userId: "6nND7Bh4jdhedfXnfOXvmM7Iwuv2",
+  },
+  {
+    displayName: "Ajayi Ayobami",
+    email: "lynxdm32@gmail.com",
+    userId: "RpnOnCzRMZb790xizN1yl4U2JCK2",
+  },
+];
 
 export default firebase_app;

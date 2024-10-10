@@ -51,7 +51,7 @@ const CommentItem = ({
 }) => {
   const { id: articleId, publishLink } = article;
   const router = useRouter();
-  const { user, admin, isAdmin } = useGlobalContext();
+  const { user, currentAdmin: {isAdmin}, admins } = useGlobalContext();
   const { setIsModalWarningOpen, setWarningContent } = useWarningContext();
 
   const [newReply, setNewReply] = useState("");
@@ -96,7 +96,7 @@ const CommentItem = ({
   const handleAddLike = () => {
     setIsLiked(true);
     setLikesCount(likesCount + 1);
-    addLike(parentId, comment, user, articleId, publishLink, admin)
+    addLike(parentId, comment, user, articleId, publishLink, admins[0])
       .then(() => {
         updateComments();
       })
@@ -130,7 +130,7 @@ const CommentItem = ({
         parentId,
         articleId,
         publishLink,
-        admin
+        admins[0]
       )
         .then(() => {
           setIsLoading(false);
@@ -195,7 +195,7 @@ const CommentItem = ({
             <div className='mb-2 flex items-center gap-2 font-kurale text-[0.9rem] text-gray-600 dark:text-darkSecondary'>
               <p className='font-bold'>
                 {displayName}{" "}
-                {email === admin.email && (
+                {email === admins[0].email && (
                   <HiBadgeCheck className='inline size-4' title='Author' />
                 )}
               </p>

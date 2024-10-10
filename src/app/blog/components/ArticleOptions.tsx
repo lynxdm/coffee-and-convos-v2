@@ -23,7 +23,7 @@ const ArticleOptions = ({
   content: string | undefined;
 }) => {
   const router = useRouter();
-  const { isAdmin } = useGlobalContext();
+  const { currentAdmin: {isAdmin} } = useGlobalContext();
   const { setWarningContent, setIsModalWarningOpen } = useWarningContext();
 
   const [isPinned, setIsPinned] = useState(false);

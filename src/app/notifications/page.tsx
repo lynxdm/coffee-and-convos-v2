@@ -1,12 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useGlobalContext } from "../contexts/AppContext";
-import NotificationItem from "../components/NotificationItem";
+import NotificationItem from "./components/NotificationItem";
 import { Notification } from "../_firebase/notifications";
 import { markNotificationsAsRead } from "../_firebase/notifications";
 
 const Notifications = () => {
-  const { userNotifications, user, isAdmin } = useGlobalContext();
+  const {
+    userNotifications,
+    user,
+    currentAdmin: { isAdmin },
+  } = useGlobalContext();
   const [newNotifications, setNewNotifications] = useState<
     Notification[] | null
   >(null);
@@ -38,7 +42,11 @@ const Notifications = () => {
     );
   }
 
-  return <h1 className='mx-auto my-14 text-2xl'>No new notifications</h1>;
+  return (
+    <h1 className='mx-auto my-14 text-2xl text-center font-kurale font-semibold lg:text-3xl'>
+      No new notifications 🫡
+    </h1>
+  );
 };
 
 export default Notifications;

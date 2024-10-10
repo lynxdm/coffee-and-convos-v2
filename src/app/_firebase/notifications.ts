@@ -7,13 +7,12 @@ import {
   doc,
   setDoc,
   updateDoc,
-  addDoc,
 } from "firebase/firestore";
 import { db } from "@/app/_firebase/config";
 import { v4 } from "uuid";
 import { UserInfo } from "firebase/auth";
 import { Comment } from "./firestore";
-import { admin } from "@/app/_firebase/config";
+import { admins } from "@/app/_firebase/config";
 
 export interface Notification {
   type: string;
@@ -42,11 +41,11 @@ export const createUserNotification = async (result: UserInfo) => {
     if (querySnapshot.empty) {
       let newUserNotificationData;
 
-      if (result.email === admin.email) {
+      if (result.email === admins[0].email) {
         newUserNotificationData = {
           userNotifications: [],
-          displayName: admin.displayName,
-          email: admin.email,
+          displayName: admins[0].displayName,
+          email: admins[0].email,
           id: "adminNotifications",
         };
       } else {
@@ -58,7 +57,7 @@ export const createUserNotification = async (result: UserInfo) => {
         };
       }
 
-      let newUserRef = doc(db, "notifications", newUserNotificationData.id);
+      const newUserRef = doc(db, "notifications", newUserNotificationData.id);
 
       await setDoc(newUserRef, newUserNotificationData);
     } else {
@@ -79,7 +78,7 @@ export const sendNotification = async (
   admin: { email: string }
 ) => {
   const {
-    user: { userId, displayName, email, photoURL },
+    user: { userId, email },
     id,
     content,
   } = comment;

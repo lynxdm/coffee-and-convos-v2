@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useGlobalContext } from "@/app/contexts/AppContext";
-import NotificationItem from "@/app/components/NotificationItem";
+import NotificationItem from "../components/NotificationItem";
 import { Notification } from "@/app/_firebase/notifications";
 
 const ReadNotifications = () => {
@@ -24,12 +24,12 @@ const ReadNotifications = () => {
         setReadNotifications([...newArr]);
       }
     }
-  }, []);
+  }, [userNotifications]);
 
   if (readNotifications) {
     return (
       <ul className='mx-auto my-14 flex max-w-[50rem] flex-col gap-3'>
-        {readNotifications.map((notification, index) => {
+        {readNotifications.map((notification) => {
           return (
             <NotificationItem {...notification} key={notification.timestamp} />
           );
@@ -38,6 +38,10 @@ const ReadNotifications = () => {
     );
   }
 
-  return <h1 className='mx-auto my-14 text-2xl'>No previous notifications</h1>;
+  return (
+    <h1 className='mx-auto my-14 text-2xl text-center font-kurale font-semibold lg:text-3xl'>
+      No previous notifications 🫡
+    </h1>
+  );
 };
 export default ReadNotifications;

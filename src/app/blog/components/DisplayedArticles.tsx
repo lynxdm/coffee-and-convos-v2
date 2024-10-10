@@ -3,17 +3,20 @@ import { ArticleData } from "@/app/_firebase/firestore";
 import Tagsection from "./Tagsection";
 import ArticleCard from "@/app/components/ArticleCard";
 import { useSearchParams } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 const DisplayedArticles = ({ articles }: { articles: ArticleData[] }) => {
-  console.log(articles);
+  const [isFiltered, setIsfiltered] = useState(true);
   const searchParams = useSearchParams();
 
   const displayedArticles = useMemo(() => {
     if (searchParams.has("tag")) {
+      setIsfiltered(false);
       const currentTag = searchParams.get("tag");
       return articles.filter((article) => article.tags.includes(currentTag!));
     }
+
+    setIsfiltered(true);
     return articles;
   }, [searchParams, articles]);
 
@@ -28,6 +31,11 @@ const DisplayedArticles = ({ articles }: { articles: ArticleData[] }) => {
             );
           })}
         </article>
+        {isFiltered && (
+          <p className='font-kurale font-semibold text-2xl text-center mt-8'>
+            You&#39;ve reached the end! 😘
+          </p>
+        )}
       </section>
     </>
   );
