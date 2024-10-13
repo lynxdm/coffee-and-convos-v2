@@ -70,7 +70,7 @@ const Footer = () => {
           <a href='http://medium.com/@fforFunke' target='_blank'>
             <FaMedium />
           </a>
-          <a href='mailto:Adesegunfunke16@gmail.com'>
+          <a href='mailto:adesegunfunke16@gmail.com'>
             <BiLogoGmail />
           </a>
         </div>

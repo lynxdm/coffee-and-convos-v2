@@ -25,8 +25,8 @@ export const provider = new GoogleAuthProvider();
 export const admins = [
   {
     displayName: "Adesegun Adefunke",
-    email: "adefunke16@gmail.com",
-    userId: "6nND7Bh4jdhedfXnfOXvmM7Iwuv2",
+    email: "adesegunfunke16@gmail.com",
+    userId: "6nNDyBh4jdhedfXnfOXvmM7lwuv2",
   },
   {
     displayName: "Ajayi Ayobami",
