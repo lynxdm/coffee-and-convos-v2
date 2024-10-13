@@ -4,6 +4,7 @@ import Footer from "@/app/components/Footer";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { timeAgo } from "@/app/_lib/accessoryFunctions";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { fetchArticleContent } from "@/app/_firebase/storage";
 import ArticleOptions from "@/app/blog/components/ArticleOptions";
 import CommentSection from "@/app/blog/components/CommentSection";
@@ -117,7 +118,10 @@ const SingleArticle = async ({ params }: { params: { slug: string } }) => {
             className='rounded-lg w-[60rem] aspect-[16/9] object-cover object-center'
           />
         </div>
-        <ReactMarkdown className='prose-lg mx-auto max-w-[50rem] break-words font-overpass md:prose-xl prose-headings:mb-4 prose-headings:mt-8 prose-headings:font-kreon prose-headings:font-bold prose-h2:font-extrabold prose-p:my-4 prose-li:list-disc lg:prose-h2:text-4xl'>
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          className='prose-lg mx-auto max-w-[50rem] break-words font-overpass md:prose-xl prose-headings:mb-4 prose-headings:mt-8 prose-headings:font-kreon prose-headings:font-bold prose-h2:font-extrabold prose-p:my-4 prose-li:list-disc lg:prose-h2:text-4xl'
+        >
           {content}
         </ReactMarkdown>
         <div className='font-kreon gap-3 flex flex-wrap text-lg justify-center w-full max-w-[50rem] mx-auto my-8'>

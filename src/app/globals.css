@@ -8,8 +8,8 @@
   @apply absolute border shadow-md flex-col gap-3 bg-white top-0 left-0 -translate-y-[102%] rounded-lg  p-4;
 }
 
-.post-options div{
-    @apply flex flex-col gap-2
+.post-options div {
+  @apply flex flex-col gap-2;
 }
 
 .post-options-dark {
@@ -26,4 +26,27 @@
 
 .post-options-label-style {
   @apply font-inter w-fit font-semibold;
+}
+
+.markdown-styles {
+  /* General layout and typography */
+  @apply prose-lg mx-auto max-w-[50rem] break-words font-overpass md:prose-xl;
+
+  /* Headings */
+  @apply prose-headings:mb-4 prose-headings:mt-8 prose-headings:font-kreon;
+  @apply prose-h2:font-extrabold lg:prose-h2:text-4xl;
+
+  /* Text elements */
+  @apply prose-p:my-4 prose-li:list-disc;
+
+  /* Images and tables */
+  @apply prose-img:rounded-md prose-table:divide-y divide-gray-200 dark:divide-neutral-700;
+  @apply prose-thead:bg-gray-50 dark:prose-thead:bg-neutral-700;
+
+  /* Table headers */
+  @apply prose-th:px-6 prose-th:py-3 prose-td:border-b border-b-gray-200 dark:border-b-neutral-700;
+  @apply prose-th:text-start prose-th:text-xs prose-th:font-semibold prose-th:text-gray-500 prose-th:uppercase dark:prose-th:text-neutral-400 prose-th:font-inter;
+
+  /* Table cells */
+  @apply prose-td:px-6 prose-td:py-4 prose-td:whitespace-pre-wrap prose-td:text-sm prose-td:font-medium prose-td:text-gray-800 dark:prose-td:text-neutral-200;
 }

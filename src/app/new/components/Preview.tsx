@@ -1,4 +1,5 @@
 "use client";
+import remarkGfm from "remark-gfm";
 import { ArticleDraft } from "../../_firebase/firestore";
 import ReactMarkdown from "react-markdown";
 
@@ -20,9 +21,11 @@ const Preview = ({ articleDraft }: { articleDraft: ArticleDraft }) => {
         )}
       </div>
       <ReactMarkdown
-        children={content}
-        className='prose-lg mx-auto max-w-[50rem] break-words font-overpass md:prose-xl prose-headings:mb-4 prose-headings:mt-8 prose-headings:font-kreon prose-headings:font-bold prose-h2:font-extrabold prose-p:my-4 prose-li:list-disc lg:prose-h2:text-4xl'
-      />
+        remarkPlugins={[remarkGfm]}
+        className='markdown-styles'
+      >
+        {content}
+      </ReactMarkdown>
     </article>
   );
 };
