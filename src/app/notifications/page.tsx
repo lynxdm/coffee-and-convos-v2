@@ -4,8 +4,10 @@ import { useGlobalContext } from "../contexts/AppContext";
 import NotificationItem from "./components/NotificationItem";
 import { Notification } from "../_firebase/notifications";
 import { markNotificationsAsRead } from "../_firebase/notifications";
+import useCheckUser from "../hooks/useCheckUser";
 
 const Notifications = () => {
+  useCheckUser(false);
   const {
     userNotifications,
     user,
@@ -31,6 +33,10 @@ const Notifications = () => {
       markNotificationsAsRead(user, isAdmin);
     }
   }, [userNotifications, isAdmin, user]);
+
+  if (!user.email) {
+    return null;
+  }
 
   if (newNotifications) {
     return (

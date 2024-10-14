@@ -21,6 +21,8 @@ import Preview from "./components/Preview";
 import { ArticleDraft } from "../_firebase/firestore";
 import { getTags, Tags } from "../_firebase/firestore";
 import PostOptions from "./components/PostOptions";
+import useCheckUser from "../hooks/useCheckUser";
+import { useGlobalContext } from "../contexts/AppContext";
 
 const initialDraft = {
   coverImg: "",
@@ -35,6 +37,11 @@ const initialDraft = {
 };
 
 const New = () => {
+  useCheckUser(true);
+  const {
+    currentAdmin: { isAdmin },
+    user,
+  } = useGlobalContext();
   const router = useRouter();
   const { setIsModalWarningOpen, setWarningContent } = useWarningContext();
   const [articleDraft, setArticleDraft] = useState<ArticleDraft>(initialDraft);
@@ -222,6 +229,10 @@ const New = () => {
     localStorage.removeItem("articleDraft");
     router.push("/");
   };
+
+  if (!isAdmin) {
+    return null;
+  }
 
   return (
     <>

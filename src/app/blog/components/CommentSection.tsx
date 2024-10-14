@@ -16,6 +16,7 @@ import { ScaleLoader } from "react-spinners";
 import Link from "next/link";
 import { useGlobalContext } from "../../contexts/AppContext";
 import { sendAdminNotification } from "../../_firebase/notifications";
+import Image from "next/image";
 
 const CommentSection = ({ article }: { article: Doc }) => {
   const { user, admins } = useGlobalContext();
@@ -78,10 +79,12 @@ const CommentSection = ({ article }: { article: Doc }) => {
       <div className='mt-7 flex items-start gap-3'>
         {user.photoURL ? (
           !imageError ? (
-            <img
+            <Image
               src={user.photoURL}
               alt={user.displayName + " display photo"}
-              className='size-8 rounded-full'
+              height={150}
+              width={150}
+              className='size-8 rounded-full object-cover object-center'
               onError={() => setImageError(true)}
             />
           ) : (
@@ -121,7 +124,7 @@ const CommentSection = ({ article }: { article: Doc }) => {
                 </button>
               ) : (
                 <Link
-                  href={"/login"}
+                  href={`/login?from=/blog/${article.publishLink}`}
                   className='rounded-md bg-[#3e3b3b] px-4 py-2 text-white hover:bg-[#343432]'
                 >
                   Login to post

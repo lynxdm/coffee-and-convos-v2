@@ -1,4 +1,3 @@
-"use server";
 import {
   getDocs,
   Query,

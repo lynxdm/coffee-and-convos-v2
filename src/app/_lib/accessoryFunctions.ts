@@ -1,5 +1,3 @@
-import { Timestamp } from "firebase/firestore";
-
 export function timeAgo(timestamp: string, comment: boolean) {
   const now = new Date();
   // const createdAt = timestamp.toDate(); // Convert Firebase Timestamp to JS Date
@@ -49,4 +47,20 @@ export const formatLink = (text: string) => {
   return (formattedText = formattedText
     .replace(/[^a-z0-9\s]/g, "")
     .replace(/\s+/g, "-"));
+};
+
+export const checkPreviousPageAndRoute = (
+  searchParams: URLSearchParams,
+  router: NextRouter
+) => {
+  if (searchParams.has("from")) {
+    const previousPage = searchParams.get("from");
+    if (previousPage?.startsWith("/blog/")) {
+      router.push(`${previousPage}#comments`);
+    } else {
+      router.push(previousPage);
+    }
+    return;
+  }
+  router.push("/");
 };

@@ -5,12 +5,13 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { FaChevronLeft } from "react-icons/fa6";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "sonner";
-import { auth, storage } from "@/app/_firebase/config";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { uploadProfileImage } from "@/app/_firebase/storage";
 import { signInWithGoogle, createUserWithEmail } from "@/app/_firebase/auth";
 import { createUserNotification } from "@/app/_firebase/notifications";
+import { checkPreviousPageAndRoute } from "@/app/_lib/accessoryFunctions";
+import Image from "next/image";
 
 interface UserInfo {
   email: string;
@@ -23,6 +24,7 @@ interface UserInfo {
 
 const SignUp = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [userInfo, setUserInfo] = useState<UserInfo>({
     email: "",
     firstName: "",
@@ -95,7 +97,7 @@ const SignUp = () => {
         photoURL: "",
         profileId: uuidv4(),
       });
-      router.push("/");
+      checkPreviousPageAndRoute(searchParams, router);
     } else if (error) toast.error(error);
   };
 
@@ -110,7 +112,7 @@ const SignUp = () => {
                 const { result, error } = await signInWithGoogle();
                 if (result) {
                   createUserNotification(result);
-                  router.push("/");
+                  checkPreviousPageAndRoute(searchParams, router);
                 } else if (error) {
                   toast.error(error);
                 }
@@ -147,7 +149,11 @@ const SignUp = () => {
             Already have an account?{" "}
             <Link
               className='font-extrabold text-blue-700 dark:text-[#5b5bca]'
-              href={"/login"}
+              href={`/login/${
+                searchParams.has("from")
+                  ? `?from=${searchParams.get("from")}`
+                  : ""
+              }`}
             >
               Sign in
             </Link>
@@ -187,8 +193,10 @@ const SignUp = () => {
                   </label>
                 ) : (
                   <div className='mb-4 flex items-center gap-3 lg:gap-4'>
-                    <img
+                    <Image
                       src={userInfo.photoURL}
+                      height={150}
+                      width={150}
                       alt='profile photo'
                       className='size-[5rem] rounded-full border border-gray-700 object-cover dark:border-[#3a3a3a]'
                     />

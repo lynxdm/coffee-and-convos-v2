@@ -1,17 +1,18 @@
 "use client";
-import { ChangeEvent, FormEvent, FormEventHandler, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import Link from "next/link";
 import { signInWithGoogle, signInWithEmail } from "../_firebase/auth";
 import { BiLogoGmail } from "react-icons/bi";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { FaChevronLeft } from "react-icons/fa6";
-import { redirect } from "next/dist/server/api-utils";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { createUserNotification } from "../_firebase/notifications";
+import { checkPreviousPageAndRoute } from "../_lib/accessoryFunctions";
 
 const SignInPage = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isUsingEmail, setIsUsingEmail] = useState(false);
   const [userInfo, setUserInfo] = useState({
     email: "",
@@ -20,7 +21,7 @@ const SignInPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    let { name, value } = e.target;
+    const { name, value } = e.target;
     setUserInfo((prev) => {
       return {
         ...prev,
@@ -37,7 +38,7 @@ const SignInPage = () => {
     );
     if (result) {
       createUserNotification(result);
-      router.push("/");
+      checkPreviousPageAndRoute(searchParams, router);
     } else if (error) {
       toast.error(error);
     }
@@ -47,7 +48,7 @@ const SignInPage = () => {
     const { result, error } = await signInWithGoogle();
     if (result) {
       createUserNotification(result);
-      router.push("/");
+      checkPreviousPageAndRoute(searchParams, router);
     } else if (error) {
       toast.error(error);
     }
@@ -91,7 +92,11 @@ const SignInPage = () => {
             No account?{" "}
             <Link
               className='font-extrabold text-blue-700 dark:text-[#5b5bca]'
-              href='/login/signup'
+              href={`/login/signup${
+                searchParams.has("from")
+                  ? `?from=${searchParams.get("from")}`
+                  : ""
+              }`}
             >
               Create one
             </Link>

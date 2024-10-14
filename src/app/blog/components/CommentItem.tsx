@@ -279,7 +279,7 @@ const CommentItem = ({
                     action: {
                       label: "Login",
                       onClick: () => {
-                        router.push("/login");
+                        router.push(`/login?from=/blog/${article.publishLink}`);
                         toast.dismiss();
                       },
                     },
@@ -308,7 +308,7 @@ const CommentItem = ({
                     action: {
                       label: "Login",
                       onClick: () => {
-                        router.push("/login");
+                        router.push(`/login?from=/blog/${article.publishLink}`);
                         toast.dismiss();
                       },
                     },
