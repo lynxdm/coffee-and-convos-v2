@@ -46,6 +46,7 @@ const EditorNav = ({
       </div>
       <button
         className='absolute right-4 lg:right-[3rem]'
+        title='Leave Editor'
         onClick={() => {
           if (
             articleDraft.title ||

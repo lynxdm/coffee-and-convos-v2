@@ -37,10 +37,10 @@
   @apply prose-h2:font-extrabold lg:prose-h2:text-4xl;
 
   /* Text elements */
-  @apply prose-p:my-4 prose-li:list-disc;
+  @apply prose-p:my-4 prose-li:list-disc prose-blockquote:border-l-4 prose-blockquote:border-[#dadada] dark:prose-blockquote:border-[#3d3d3d];
 
   /* Images and tables */
-  @apply prose-img:rounded-md prose-table:divide-y divide-gray-200 dark:divide-neutral-700;
+  @apply prose-img:rounded-md prose-img:max-w-full prose-img:mx-auto prose-table:divide-y divide-gray-200 dark:divide-neutral-700;
   @apply prose-thead:bg-gray-50 dark:prose-thead:bg-neutral-700;
 
   /* Table headers */

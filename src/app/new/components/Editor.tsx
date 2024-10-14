@@ -208,6 +208,8 @@ const Editor = ({
           type='button'
           className='font-mono text-2xl hover:bg-blue-100 hover:text-blue-700 dark:hover:bg-[#343434] dark:hover:text-darkPrimary'
           onClick={handleBold}
+          aria-label='Bold'
+          title='Bold'
         >
           B
         </button>
@@ -215,6 +217,8 @@ const Editor = ({
           type='button'
           className='font-mono text-2xl italic hover:bg-blue-100 hover:text-blue-700 dark:hover:bg-[#343434] dark:hover:text-darkPrimary'
           onClick={handleItalic}
+          aria-label='Italic'
+          title='Italic'
         >
           I
         </button>
@@ -223,6 +227,8 @@ const Editor = ({
             type='button'
             className='size-10 rounded font-mono text-2xl hover:bg-blue-100 hover:text-blue-700 dark:hover:bg-[#343434] dark:hover:text-darkPrimary'
             ref={headingsButton}
+            aria-label='Headings'
+            title='Headings'
             onClick={() => {
               setShowHeadingsDropdown(!showHeadingsDropdown);
             }}
@@ -239,11 +245,15 @@ const Editor = ({
               type='button'
               onClick={() => handleHeadings("##")}
               onMouseUp={() => setShowHeadingsDropdown(false)}
+              aria-label='Heading 2'
+              title='Heading 2'
             >
               H2
             </button>
             <button
               className='border-x dark:border-[#3a3a3a]'
+              aria-label='Heading 3'
+              title='Heading 3'
               type='button'
               onClick={() => handleHeadings("###")}
               onMouseUp={() => setShowHeadingsDropdown(false)}
@@ -252,6 +262,8 @@ const Editor = ({
             </button>
             <button
               type='button'
+              aria-label='Heading 4'
+              title='Heading 4'
               onClick={() => handleHeadings("####")}
               onMouseUp={() => setShowHeadingsDropdown(false)}
             >
@@ -261,6 +273,8 @@ const Editor = ({
         </div>
         <button
           type='button'
+          aria-label='Underline'
+          title='Underline'
           className='font-mono text-2xl underline hover:bg-blue-100 hover:text-blue-700 dark:hover:bg-[#343434] dark:hover:text-darkPrimary'
           onClick={handleUnderline}
         >
@@ -268,6 +282,8 @@ const Editor = ({
         </button>
         <button
           type='button'
+          aria-label='Strike-through'
+          title='Strike-through'
           className='font-mono text-2xl line-through hover:bg-blue-100 hover:text-blue-700 dark:hover:bg-[#343434] dark:hover:text-darkPrimary'
           onClick={handleStrikethrough}
         >
@@ -276,6 +292,8 @@ const Editor = ({
         <button
           type='button'
           onClick={handleLinking}
+          aria-label='Link Embed'
+          title='Link Embed'
           className='hover:bg-blue-100 hover:fill-blue-700 dark:hover:bg-[#343434] dark:hover:fill-darkPrimary'
         >
           <svg
@@ -291,6 +309,8 @@ const Editor = ({
         <button
           type='button'
           onClick={handleOrderedList}
+          aria-label='Ordered List'
+          title='Ordered List'
           className='hover:bg-blue-100 hover:fill-blue-700 dark:hover:bg-[#343434] dark:hover:fill-darkPrimary'
         >
           <svg
@@ -306,6 +326,8 @@ const Editor = ({
         <button
           type='button'
           onClick={handleUnOrderedList}
+          aria-label='Unordered List'
+          title='Unordered List'
           className='hover:bg-blue-100 hover:fill-blue-700 dark:hover:bg-[#343434] dark:hover:fill-darkPrimary'
         >
           <svg
@@ -321,6 +343,8 @@ const Editor = ({
         <button
           type='button'
           onClick={handleQuote}
+          aria-label='Block Quote'
+          title='Block Quote'
           className='hover:bg-blue-100 hover:fill-blue-700 dark:hover:bg-[#343434] dark:hover:fill-darkPrimary'
         >
           <svg
@@ -335,6 +359,8 @@ const Editor = ({
         </button>
         <label
           htmlFor='add-img'
+          aria-label='Add Image'
+          title='Add Image'
           className='hover:bg-blue-100 hover:fill-blue-700 dark:hover:bg-[#343434] dark:hover:fill-darkPrimary'
         >
           {imageIsLoading ? (
