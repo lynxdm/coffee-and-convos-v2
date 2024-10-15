@@ -82,31 +82,35 @@ const ArticleCard = ({ type, article }: { type: string; article: Doc }) => {
           <h3 className='font-kreon text-2xl font-semibold'>{title}</h3>
         </Link>
       </li>
-      <li className='border-y border-primary relative dark:border-[#3a3a3a] aspect-[16/7] md:aspect-[3/1.5]'>
-        {isImageLoading && (
-          <Skeleton
-            containerClassName='absolute -mt-1 top-0 left-0 h-full w-full'
-            height='100%'
-            borderRadius={0}
-            style={{ aspectRatio: "16 / 7" }}
+      <Link href={`/blog/${formatLink(title)}`}>
+        <li className='border-y border-primary relative dark:border-[#3a3a3a] aspect-[16/7] md:aspect-[3/1.5]'>
+          {isImageLoading && (
+            <Skeleton
+              containerClassName='absolute -mt-1 top-0 left-0 h-full w-full'
+              height='100%'
+              borderRadius={0}
+              style={{ aspectRatio: "16 / 7" }}
+            />
+          )}
+          <Image
+            fill
+            className={`aspect-[16/7] object-cover object-center md:aspect-[3/1.5] ${
+              isImageLoading ? "opacity-0" : "opacity-100"
+            } transition-opacity duration-300`}
+            src={cover.image || placeholderImg}
+            alt={cover.alt}
+            onLoad={() => setIsImageLoading(false)}
+            onError={() => setIsImageLoading(false)}
           />
-        )}
-        <Image
-          fill
-          className={`aspect-[16/7] object-cover object-center md:aspect-[3/1.5] ${
-            isImageLoading ? "opacity-0" : "opacity-100"
-          } transition-opacity duration-300`}
-          src={cover.image || placeholderImg}
-          alt={cover.alt}
-          onLoad={() => setIsImageLoading(false)}
-          onError={() => setIsImageLoading(false)}
-        />
-      </li>
+        </li>
+      </Link>
       <li className='mt-6 px-2'>
         {content ? (
-          <ReactMarkdown className='prose line-clamp-3 leading-loose prose-headings:hidden prose-p:my-0 prose-img:hidden dark:text-darkSecondary'>
-            {content}
-          </ReactMarkdown>
+          <Link href={`/blog/${formatLink(title)}`}>
+            <ReactMarkdown className='prose line-clamp-3 leading-loose prose-headings:hidden prose-p:my-0 prose-img:hidden dark:text-darkSecondary'>
+              {content}
+            </ReactMarkdown>
+          </Link>
         ) : (
           <Skeleton count={4} enableAnimation={true} width='100%' />
         )}
