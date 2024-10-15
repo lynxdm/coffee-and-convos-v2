@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     default: "Coffee & Convos",
     template: `%s - Coffee & Convos`,
   },
-  description: "A personal blog by the betawriter",
+  description: "Adefunke's blog",
   creator: "Adesegun Adefunke",
 };
 
