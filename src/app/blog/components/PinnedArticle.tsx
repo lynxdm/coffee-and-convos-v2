@@ -15,8 +15,11 @@ const PinnedArticle = ({
   previewContent: string | undefined;
 }) => {
   return (
-    <section className='mt-8 flex flex-col items-center justify-between gap-4 border-b-2 border-primary pb-4 dark:border-[#3a3a3a] lg:flex-row lg:gap-8 lg:border-2 lg:pb-0'>
-      <div className='relative h-full flex-grow aspect-[2/1.5] w-full max-w-[40rem]  md:aspect-[2/1.2] lg:aspect-[1/1.1] lg:w-[80%] xl:w-[60%]  lg:max-w-full min-[1200px]:aspect-[2/1.8] xl:aspect-[2/1.5]'>
+    <section className='mt-8 flex flex-col justify-between items-center gap-4 border-b-2 border-primary pb-4 dark:border-[#3a3a3a] lg:flex-row lg:gap-8 lg:border-2 lg:pb-0'>
+      <Link
+        href={`/blog/${formatLink(pinnedArticle.title)}`}
+        className='relative h-full w-full max-w-[40rem] aspect-[2/1.5] md:aspect-[2/1.2] lg:aspect-[1/1] xl:aspect-[2/1.8] lg:w-[60%] xl:w-[55%]'
+      >
         <Image
           src={pinnedArticle.cover.image}
           alt={pinnedArticle.title + "cover image"}
@@ -24,24 +27,29 @@ const PinnedArticle = ({
           fill
           priority
         />
-      </div>
-      <div className='flex flex-col gap-4 border-primary px-3 py-2 dark:border-[#3a3a3a] lg:gap-4 lg:px-0'>
+      </Link>
+
+      <div className='flex flex-col gap-4 border-primary px-3 py-4 xl:py-8 dark:border-[#3a3a3a] lg:gap-4 lg:px-0 lg:w-[40%] xl:w-[60%]'>
         <Link
           href={`/blog/${formatLink(pinnedArticle.title)}`}
           className='flex items-start gap-3 border-primary pr-2 hover:text-gray-600 dark:border-[#3a3a3a] dark:hover:text-gray-400 lg:border-b lg:pb-3'
         >
-          <h2 className='lg:max-w-[92%]: max-w-[90%] font-kreon text-3xl font-extrabold xl:text-4xl'>
+          <h2 className='lg:max-w-[92%] max-w-[90%] font-kreon text-3xl font-extrabold xl:text-4xl'>
             {pinnedArticle.title}
           </h2>
           <FiArrowUpRight className='size-6' />
         </Link>
+
         {previewContent ? (
-          <ReactMarkdown className='prose line-clamp-6 pr-2 prose-headings:hidden prose-p:my-0 prose-img:hidden dark:text-darkSecondary lg:line-clamp-5 lg:leading-8 xl:max-w-[41rem]'>
-            {previewContent}
-          </ReactMarkdown>
+          <Link href={`/blog/${formatLink(pinnedArticle.title)}`}>
+            <ReactMarkdown className='prose line-clamp-6 pr-2 prose-headings:hidden prose-p:my-0 prose-img:hidden dark:text-darkSecondary lg:line-clamp-5 lg:leading-8 xl:max-w-[41rem] min-[1600px]:prose-lg min-[1600px]:max-w-[60rem]'>
+              {previewContent}
+            </ReactMarkdown>
+          </Link>
         ) : (
           <Skeleton width='100%' count={5} className='leading-8' />
         )}
+
         <div className='font-kreon gap-2 flex flex-wrap text-lg font-semibold justify-start w-full mx-auto -mt-2'>
           {pinnedArticle.tags.map((tag) => {
             return (
@@ -55,6 +63,7 @@ const PinnedArticle = ({
             );
           })}
         </div>
+
         <div className='flex flex-col justify-center gap-1'>
           <div className='flex items-start gap-1 text-pink-700'>
             <RxDrawingPinFilled className='lg:size-5' />
