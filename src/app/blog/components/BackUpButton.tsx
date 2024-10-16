@@ -25,12 +25,13 @@ const BackUpButton = () => {
 
   return (
     <button
-      aria-label='Go up'
-      className={`fixed bottom-8 right-8 bg-[#242424a5] dark:hover:bg-[#ffffff9b] dark:bg-[#ffffff72] hover:bg-[#242424] text-[#e9e7e7] dark:text-[#272626cd] size-[3rem] grid place-items-center rounded-full ${
+      aria-label='Scroll up'
+      title="Scroll up"
+      className={`fixed bottom-8 right-8 bg-primary dark:bg-[#f5f4f8] text-[#e9e7e7] dark:text-primary size-[3rem] grid place-items-center rounded-lg ${
         !showButton
           ? "opacity-0 pointer-events-none"
           : "opacity-90 pointer-events-auto"
-      } transition-opacity duration-300`}
+      } transition-[opacity_transform] duration-300 `}
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
     >
       <IoArrowUpOutline className='size-[1.5rem]' />
