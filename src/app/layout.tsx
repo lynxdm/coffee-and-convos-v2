@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   },
   description: "Adefunke's blog",
   creator: "Adesegun Adefunke",
+  verification: {
+    google: "rMB-vY4K9xQw-VKT8BS4DkKUJt1HvbTc9_VN6oRVtZg",
+  },
 };
 
 export default function RootLayout({
