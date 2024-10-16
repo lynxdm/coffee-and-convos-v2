@@ -1,4 +1,3 @@
-import { url } from "inspector";
 import { getArticles } from "./_firebase/firestore";
 import { collection } from "firebase/firestore";
 import { db } from "./_firebase/config";
