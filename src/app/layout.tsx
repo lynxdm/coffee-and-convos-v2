@@ -4,6 +4,7 @@ import AppProvider from "./contexts/AppContext";
 import { Analytics } from "@vercel/analytics/react";
 import Navbar from "./components/Navbar";
 import { Toaster } from "sonner";
+import { ReactLenis } from "../app/_lib/lenis";
 import WarningModalProvider from "./contexts/WarningModalContext";
 
 export const metadata: Metadata = {
@@ -27,14 +28,16 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <AppProvider>
-        <body className='dark:text-darkPrimary dark:bg-darkBg  bg-white font-overpass text-primary min-h-[100vh]'>
-          <WarningModalProvider>
-            <Navbar bg='' />
-            <Toaster richColors position='top-right' />
-            {children}
-          </WarningModalProvider>
-          <Analytics />
-        </body>
+        <ReactLenis root>
+          <body className='dark:text-darkPrimary dark:bg-darkBg  bg-white font-overpass text-primary min-h-[100vh]'>
+            <WarningModalProvider>
+              <Navbar bg='' />
+              <Toaster richColors position='top-right' />
+              {children}
+            </WarningModalProvider>
+            <Analytics />
+          </body>
+        </ReactLenis>
       </AppProvider>
     </html>
   );
